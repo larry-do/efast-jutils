@@ -1,0 +1,1 @@
+java -jar JRebelLicenseServer.jar -p 8998
