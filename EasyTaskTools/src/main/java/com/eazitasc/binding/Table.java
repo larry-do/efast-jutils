@@ -1,31 +1,37 @@
-package com.eazitasc.sax;
+package com.eazitasc.binding;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@ToString
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Table {
-    @XmlAttribute
+    @XmlAttribute(required = true)
     private String name;
 
-    @XmlAttribute
+    @XmlTransient
     private String className;
 
     @XmlAttribute
     private String parent;
 
-    @XmlAttribute
-    private Boolean isAstract;
+    @XmlAttribute(name = "abstract")
+    private Boolean isAbstract;
 
     @XmlElement
     private LinkedHashSet<Column> column;
@@ -33,15 +39,10 @@ public class Table {
     @XmlElement
     private LinkedHashSet<Key> key;
 
-    @Override
-    public String toString() {
-        return "Table{" +
-                "name='" + name + '\'' +
-                ", className='" + className + '\'' +
-                ", parent='" + parent + '\'' +
-                ", isAstract=" + isAstract +
-                ", column=" + column +
-                ", key=" + key +
-                '}';
+    public Set<Key> getUniqueConstraints() {
+        if (this.key == null || this.key.isEmpty()) return null;
+        else {
+            return this.key.stream().filter(k -> StringUtils.isEmpty(k.getType())).collect(Collectors.toSet());
+        }
     }
 }
