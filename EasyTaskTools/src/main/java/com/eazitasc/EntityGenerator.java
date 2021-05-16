@@ -1,11 +1,10 @@
 package com.eazitasc;
 
 import com.eazitasc.binding.Table;
-import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.tools.generic.DisplayTool;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -21,9 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +33,8 @@ public class EntityGenerator {
     private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir");
     private static final String ENTITY_XML_FOLDER_PATH = "EasyTask/src/main/resources/entities";
     private static final String DATATYPE_FILE_PATH = "EasyTaskTools/src/main/resources/datatypes.properties";
-    private static final String ENTITY_TEMPLATE_PATH = "EasyTaskTools/src/main/resources/Entity-template.vm";
+    private static final String ENTITY_TEMPLATE_DIR = "EasyTaskTools/src/main/resources";
+    private static final String ENTITY_TEMPLATE = "entity-template.ftl";
     private static final String ENTITY_JAVA_FOLDER_PATH = "EasyTask/src/main/java/com/eazitasc/entity";
 
     private static final String EASYTASK_POM_PATH = "EasyTask/pom.xml";
@@ -61,7 +64,6 @@ public class EntityGenerator {
 
     private static void readXmlFile(final String filePath) {
         final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
-        System.out.println("----------------------------");
         System.out.println(fileName + ".xml");
         final Table table = bindXmlToObject(filePath);
         if (table != null) {
@@ -70,97 +72,125 @@ public class EntityGenerator {
     }
 
     private static Table bindXmlToObject(final String filePath) {
-        final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
         try {
             final JAXBContext jaxbContext = JAXBContext.newInstance(Table.class);
             final File file = new File(PROJECT_ROOT_PATH + "/" + filePath);
             final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             Table table = (Table) jaxbUnmarshaller.unmarshal(file);
-
-            // handle data in table
-            if (table.getName() == null) {
-                table.setName(fileName);
-            }
-            table.setName(table.getName().toLowerCase());
-            table.setClassName(table.getName());
-            table.setClassName(StringUtils.capitalize(table.getClassName()));
-            if (table.getParent() != null) {
-                table.setParent(StringUtils.capitalize(table.getParent().toLowerCase()));
-            }
-            if (table.getColumn() != null) {
-                final Properties datatypes = getDatatypes(DATATYPE_FILE_PATH);
-                table.getColumn().forEach(column -> {
-                    if (column.getName() != null) {
-                        column.setName(column.getName().toLowerCase());
-                    }
-
-                    if (column.getPropertyName() == null) {
-                        column.setPropertyName(column.getName());
-                    }
-                    if (column.getType().lastIndexOf("enum") != -1) {
-                        column.setJvType("String");
-                    } else if (datatypes.getProperty(column.getType()) != null) {
-                        column.setJvType(datatypes.getProperty(column.getType()));
-                        column.setDbType(datatypes.getProperty("db." + column.getType()));
-                    } else {
-                        // todo show error that column xxx of table xxx has invalid datatype
-                    }
-                });
-            }
-            if (table.getKey() != null) {
-                table.getKey().forEach(key -> {
-                    if (StringUtils.isNotEmpty(key.getColumns())) {
-                        key.setColumns(key.getColumns().toLowerCase());
-                    }
-                    if (key.getMapping() != null) {
-                        if (StringUtils.isNotEmpty(key.getMapping().getOrderBy())) {
-                            key.getMapping().setOrderBy(key.getMapping().getOrderBy().toLowerCase());
-                        }
-                    }
-                });
-            }
-
-            return table;
+            return preHandleTable(table, filePath);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private static void generateEntity(final Table table, final String fileName)  {
-        String fileNameWithExt = StringUtils.capitalize(fileName.toLowerCase().concat(".java"));
-        System.out.println("Converting to object: " + fileNameWithExt);
-        final VelocityEngine engine = new VelocityEngine();
-        engine.init();
-        VelocityContext context = new VelocityContext();
-        context.put("display", new DisplayTool());
-        context.put("table", table);
-
-        LinkedHashSet<String> imports = new LinkedHashSet<>();
-        if (table.getIsAbstract() != null && table.getIsAbstract()) {
-            imports.add("import javax.persistence.MappedSuperclass;");
-        } else {
-            imports.add("import javax.persistence.Entity;");
-            imports.add("import javax.persistence.Table;");
+    private static Table preHandleTable(Table table, final String filePath) {
+        final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
+        if (table.getName() == null) {
+            table.setName(fileName);
         }
-        if (!table.getColumn().isEmpty()) {
-            imports.add("import javax.persistence.Column;");
-        }
-        if (table.getColumn().stream().anyMatch(column -> column.getJvType().equals("Date"))) {
-            imports.add("import java.util.Date;");
-        }
-        if (table.getUniqueConstraints() != null && !table.getUniqueConstraints().isEmpty()) {
-            imports.add("import javax.persistence.UniqueConstraint;");
+        table.setName(table.getName().toLowerCase());
+        table.setClassName(StringUtils.capitalize(table.getName()));
+        if (table.getParent() != null) {
+            table.setParent(StringUtils.capitalize(table.getParent().toLowerCase()));
         }
 
-        context.put("imports", imports);
+        if (table.getColumn() != null) {
+            final Properties datatypes = getDatatypes(DATATYPE_FILE_PATH);
+            table.getColumn().forEach(column -> {
+                if (column.getName() != null) {
+                    column.setName(column.getName().toLowerCase());
+                }
 
+                if (column.getPropertyName() == null) {
+                    column.setPropertyName(column.getName());
+                }
+                if (column.getType().lastIndexOf("enum") != -1) {
+                    column.setJvType("String");
+                } else if (datatypes.getProperty(column.getType()) != null) {
+                    column.setJvType(datatypes.getProperty(column.getType()));
+                    column.setDbType(datatypes.getProperty("db." + column.getType()));
+                } else {
+                    // todo show error that column xxx of table xxx has invalid datatype
+                }
+            });
+        }
+
+        if (table.getKey() != null) {
+            table.getKey().forEach(key -> {
+                if (StringUtils.isNotEmpty(key.getColumns())) {
+                    key.setColumns(key.getColumns().toLowerCase());
+                }
+            });
+            table.setPrimaryKeys(table.getKey().stream().filter(k -> StringUtils.isNotEmpty(k.getType()) && k.getType().equalsIgnoreCase("primary")).collect(Collectors.toCollection(LinkedHashSet::new)));
+            table.getPrimaryKeys().forEach(key -> key.getColumnsOfKey().forEach(keyCol -> table.getColumn().forEach(column -> {
+                if (column.getName().equalsIgnoreCase(keyCol)) {
+                    column.setIsPrimaryKey(true);
+                }
+            })));
+            table.setForeignKeys(table.getKey().stream().filter(k -> StringUtils.isNotEmpty(k.getType()) && k.getType().equalsIgnoreCase("foreign")).collect(Collectors.toCollection(LinkedHashSet::new)));
+            table.setUniqueConstraints(table.getKey().stream().filter(k -> StringUtils.isEmpty(k.getType())).collect(Collectors.toCollection(LinkedHashSet::new)));
+            table.getForeignKeys().forEach(key -> {
+                if (key.getFetch() == null) key.setFetch("");
+                key.setFetch(key.getFetch().toUpperCase());
+                if (key.getMapping() != null) {
+                    if (StringUtils.isNotEmpty(key.getMapping().getOrderBy())) {
+                        key.getMapping().setOrderBy(key.getMapping().getOrderBy().toLowerCase());
+                    }
+                }
+            });
+        }
+        return table;
+    }
+
+    private static void generateEntity(final Table table, final String fileName) {
         try {
+            final String fileNameWithExt = StringUtils.capitalize(fileName.toLowerCase().concat(".java"));
+            final Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
+            cfg.setDefaultEncoding("UTF-8");
+            cfg.setDirectoryForTemplateLoading(new File(ENTITY_TEMPLATE_DIR));
+            final Template template = cfg.getTemplate(ENTITY_TEMPLATE);
+            Map<String, Object> params = new HashMap<>();
+            params.put("table", table);
+
+            TreeSet<String> imports = new TreeSet<>();
+            if (table.getIsAbstract() != null && table.getIsAbstract()) {
+                imports.add("import javax.persistence.MappedSuperclass;");
+            } else {
+                imports.add("import javax.persistence.Entity;");
+                imports.add("import javax.persistence.Table;");
+            }
+            if (!table.getColumn().isEmpty()) {
+                imports.add("import javax.persistence.Column;");
+            }
+            if (table.getColumn().stream().anyMatch(column -> column.getJvType().equals("Date"))) {
+                imports.add("import java.util.Date;");
+            }
+            if (table.getColumn().stream().anyMatch(column -> column.getType().equals("version"))) {
+                imports.add("import javax.persistence.Version;");
+            }
+            if (table.getUniqueConstraints() != null && !table.getKey().isEmpty()) {
+                imports.add("import javax.persistence.UniqueConstraint;");
+            }
+            if (table.getPrimaryKeys() != null && !table.getPrimaryKeys().isEmpty()) {
+                imports.add("import javax.persistence.Id;");
+                imports.add("import javax.persistence.IdClass;");
+                imports.add("import java.io.Serializable;");
+            }
+            if (table.getForeignKeys() != null && !table.getForeignKeys().isEmpty()) {
+                imports.add("import javax.persistence.ManyToOne;");
+                imports.add("import javax.persistence.FetchType;");
+                imports.add("import javax.persistence.JoinColumn;");
+                imports.add("import javax.persistence.JoinColumns;");
+            }
+
+            params.put("imports", imports);
+
             FileWriter writer = new FileWriter(new File(ENTITY_JAVA_FOLDER_PATH + "/" + fileNameWithExt));
-            Velocity.mergeTemplate(ENTITY_TEMPLATE_PATH, "UTF-8", context, writer);
+            template.process(params, writer);
             writer.flush();
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
     }
@@ -185,7 +215,9 @@ public class EntityGenerator {
             String line;
             while (true) {
                 line = r.readLine();
-                if (line == null) { break; }
+                if (line == null) {
+                    break;
+                }
                 System.out.println(line);
             }
         } catch (IOException e) {

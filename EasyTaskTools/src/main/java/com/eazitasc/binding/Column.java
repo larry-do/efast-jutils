@@ -25,15 +25,18 @@ public class Column {
     @XmlAttribute(required = true)
     private String type;
 
+    @XmlAttribute
+    private Boolean nullable;
+
+    @XmlAttribute(name = "default")
+    private String defaultValue;
+
     @XmlTransient
     private String jvType;
 
     @XmlTransient
     private String dbType;
 
-    @XmlAttribute
-    private Boolean nullable;
-
-    @XmlAttribute(name = "default")
-    private String defaultValue;
+    @XmlTransient
+    private Boolean isPrimaryKey;
 }

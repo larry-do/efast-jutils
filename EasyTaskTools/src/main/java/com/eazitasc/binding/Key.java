@@ -3,7 +3,7 @@ package com.eazitasc.binding;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,8 +11,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 @Getter
 @Setter
@@ -38,10 +37,10 @@ public class Key {
     @XmlElement
     private Mapping mapping;
 
-    public Set<String> getColumnsOfKey() {
-        if (StringUtils.isEmpty(this.columns)) return new HashSet<>();
+    public LinkedHashSet<String> getColumnsOfKey() {
+        if (StringUtils.isEmpty(this.columns)) return new LinkedHashSet<>();
         else {
-            return new HashSet<>(Arrays.asList(columns.replace(" ", "").split(",")));
+            return new LinkedHashSet<>(Arrays.asList(columns.replace(" ", "").split(",")));
         }
     }
 

@@ -3,7 +3,6 @@ package com.eazitasc.binding;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -13,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -23,9 +21,6 @@ import java.util.stream.Collectors;
 public class Table {
     @XmlAttribute(required = true)
     private String name;
-
-    @XmlTransient
-    private String className;
 
     @XmlAttribute
     private String parent;
@@ -39,10 +34,20 @@ public class Table {
     @XmlElement
     private LinkedHashSet<Key> key;
 
-    public Set<Key> getUniqueConstraints() {
-        if (this.key == null || this.key.isEmpty()) return null;
-        else {
-            return this.key.stream().filter(k -> StringUtils.isEmpty(k.getType())).collect(Collectors.toSet());
-        }
+    @XmlTransient
+    private String className;
+
+    @XmlTransient
+    private LinkedHashSet<Key> primaryKeys;
+
+    @XmlTransient
+    private LinkedHashSet<Key> foreignKeys;
+
+    @XmlTransient
+    private LinkedHashSet<Key> uniqueConstraints;
+
+    public Column getColumn(String columnName) {
+        if (this.column == null) return null;
+        else return this.column.stream().filter(col -> col.getName().equalsIgnoreCase(columnName)).findFirst().orElse(null);
     }
 }
