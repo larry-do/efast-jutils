@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 
@@ -49,7 +50,7 @@ public class Key {
     @ToString
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
-    static public class Mapping {
+    public static class Mapping {
         @XmlAttribute
         private String fieldName;
 
@@ -58,5 +59,11 @@ public class Key {
 
         @XmlAttribute
         private String orderBy;
+
+        @XmlTransient
+        private String fromTable;
+
+        @XmlTransient
+        private String mappedBy;
     }
 }

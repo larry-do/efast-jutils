@@ -46,6 +46,9 @@ public class Table {
     @XmlTransient
     private LinkedHashSet<Key> uniqueConstraints;
 
+    @XmlTransient
+    private LinkedHashSet<Key.Mapping> inverseMappings;
+
     public Column getColumn(String columnName) {
         if (this.column == null) return null;
         else return this.column.stream().filter(col -> col.getName().equalsIgnoreCase(columnName)).findFirst().orElse(null);

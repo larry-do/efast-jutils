@@ -1,5 +1,6 @@
 package com.eazitasc;
 
+import com.eazitasc.binding.Key;
 import com.eazitasc.binding.Table;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -21,10 +22,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,9 +45,30 @@ public class EntityGenerator {
     public static void main(String[] args) {
         final List<String> changedXmlFiles = getChangedEntityXmlFiles();
         System.out.println("Generating entity for xml files: ");
-        changedXmlFiles.forEach(EntityGenerator::readXmlFile);
-        // build maven compile/package EasyTaskJPA-1.0.jar and copy to EasyTask libs
-        packageAndBuild();
+        HashMap<String, Set<Key>> foreignKeys = new HashMap<>();
+        changedXmlFiles.forEach(filePath -> {
+            Set<Key> foreignKeysOfEntity = generateEntityObjectFromXmlFile(filePath);
+            if (foreignKeysOfEntity != null && !foreignKeysOfEntity.isEmpty()) {
+                foreignKeysOfEntity.forEach(key -> {
+                    foreignKeys.computeIfAbsent(key.getTargetTable(), k -> new HashSet<>());
+                    foreignKeys.get(key.getTargetTable()).add(key);
+                });
+            }
+        });
+        foreignKeys.forEach((targetName, keys) -> {
+            final String filePath = ENTITY_XML_FOLDER_PATH + "/" + targetName + ".xml";
+            Table table = bindXmlToObject(filePath);
+            if (table != null) {
+                table.setInverseMappings(new LinkedHashSet<>());
+                keys.forEach(key -> {
+                    table.getInverseMappings().add(key.getMapping());
+                });
+                generateEntity(table, targetName);
+            }
+        });
+
+        // now, this will create metamodel files
+        // packageAndBuild();
     }
 
     private static List<String> getChangedEntityXmlFiles() {
@@ -62,13 +86,15 @@ public class EntityGenerator {
         return Collections.emptyList();
     }
 
-    private static void readXmlFile(final String filePath) {
+    private static Set<Key> generateEntityObjectFromXmlFile(final String filePath) {
         final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
         System.out.println(fileName + ".xml");
         final Table table = bindXmlToObject(filePath);
         if (table != null) {
             generateEntity(table, fileName);
+            return table.getForeignKeys() == null ? new HashSet<>() : table.getForeignKeys().stream().filter(key -> key.getMapping() != null).collect(Collectors.toSet());
         }
+        return new HashSet<>();
     }
 
     private static Table bindXmlToObject(final String filePath) {
@@ -134,8 +160,16 @@ public class EntityGenerator {
                 if (key.getFetch() == null) key.setFetch("");
                 key.setFetch(key.getFetch().toUpperCase());
                 if (key.getMapping() != null) {
+                    if (StringUtils.isEmpty(key.getMapping().getFieldName())) {
+                        key.getMapping().setFieldName("listOf" + table.getClassName());
+                    }
+                    key.getMapping().setFromTable(table.getClassName());
+                    key.getMapping().setMappedBy(key.getFieldName());
                     if (StringUtils.isNotEmpty(key.getMapping().getOrderBy())) {
                         key.getMapping().setOrderBy(key.getMapping().getOrderBy().toLowerCase());
+                    }
+                    if (StringUtils.isNotEmpty(key.getMapping().getFetch())) {
+                        key.getMapping().setFetch(key.getMapping().getFetch().toUpperCase());
                     }
                 }
             });
@@ -182,6 +216,16 @@ public class EntityGenerator {
                 imports.add("import javax.persistence.FetchType;");
                 imports.add("import javax.persistence.JoinColumn;");
                 imports.add("import javax.persistence.JoinColumns;");
+            }
+            if (table.getInverseMappings() != null && !table.getInverseMappings().isEmpty()) {
+                imports.add("import java.util.List;");
+                imports.add("import javax.persistence.OneToMany;");
+                if (table.getInverseMappings().stream().anyMatch(mapping -> StringUtils.isNotEmpty(mapping.getFetch()))) {
+                    imports.add("import javax.persistence.FetchType;");
+                }
+                if (table.getInverseMappings().stream().anyMatch(mapping -> StringUtils.isNotEmpty(mapping.getOrderBy()))) {
+                    imports.add("import javax.persistence.OrderBy;");
+                }
             }
 
             params.put("imports", imports);

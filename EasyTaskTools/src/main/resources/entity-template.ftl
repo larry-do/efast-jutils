@@ -40,6 +40,16 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
 
 </#list>
 </#if>
+<#if table.inverseMappings??>
+<#list table.inverseMappings as mapping>
+<#if mapping.orderBy?has_content>
+    @OrderBy("${mapping.orderBy}")
+</#if>
+    @OneToMany(targetEntity = void.class<#if mapping.fetch?has_content>, fetch = FetchType.${mapping.fetch}</#if><#if mapping.mappedBy?has_content>, mappedBy = "${mapping.mappedBy}"</#if>)
+    public List<${mapping.fromTable}> ${mapping.fieldName};
+
+</#list>
+</#if>
 <#list table.column as col>
     public ${col.jvType} get${col.propertyName?capitalize}() {
         return this.${col.propertyName};
