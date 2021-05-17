@@ -10,33 +10,34 @@ ${import}
 @Entity
 @Table(name = "${table.name}"<#if table.uniqueConstraints?? && table.uniqueConstraints?size gt 0>, uniqueConstraints = {<#list table.uniqueConstraints as key>@UniqueConstraint(columnNames = {<#list key.getColumnsOfKey() as col>"${col}"${col?has_next?then(", ", "")}</#list>})${key?has_next?then(", ", "")}</#list>}</#if>)
 </#if>
-<#if table.primaryKeys??>
-<#list table.primaryKeys as key>
+<#if table.primaryKey??>
 @IdClass(${table.name?capitalize}.Pk.class)
-</#list>
 </#if>
-public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.className}<#if table.parent??> extends ${table.parent}</#if> {
+public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.name?capitalize}<#if table.parent??> extends ${table.parent}</#if> {
 
-<#list table.column as col>
-<#if col.isPrimaryKey??!false>
+<#list table.columns as column>
+<#if column.isPrimaryKey??!false>
     @Id
 </#if>
-<#if col.type?lower_case == "version">
+<#if column.type?lower_case == "version">
     @Version
 </#if>
-    @Column(name = "${col.name}"<#if col.nullable?? && col.nullable == false>, nullable = false</#if>)
-    private ${col.jvType} ${col.propertyName};
+<#if column.isEnum?? && column.isEnum>
+    @Enumerated(EnumType.STRING)
+</#if>
+    @Column(name = "${column.name}"<#if column.nullable?? && column.nullable == false>, nullable = false</#if>)
+    private ${column.jvType} ${column.name};
 
 </#list>
 <#if table.foreignKeys??>
 <#list table.foreignKeys as key>
     @ManyToOne<#if key.fetch?has_content>(fetch = FetchType.${key.fetch})</#if>
     @JoinColumns({
-    <#list key.getColumnsOfKey() as col>
-        @JoinColumn(name="${col}", referencedColumnName = "${col}")<#if col?has_next>, </#if>
+    <#list key.columns as col>
+        @JoinColumn(name="${col.name}", referencedColumnName = "${col.target}", insertable = false, updatable = false)<#if col?has_next>, </#if>
     </#list>
     })
-    public ${key.targetTable?capitalize} ${key.fieldName};
+    public ${key.target} ${key.fieldName};
 
 </#list>
 </#if>
@@ -50,37 +51,35 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
 
 </#list>
 </#if>
-<#list table.column as col>
-    public ${col.jvType} get${col.propertyName?capitalize}() {
-        return this.${col.propertyName};
+<#list table.columns as column>
+    public ${column.jvType} get${column.name?capitalize}() {
+        return this.${column.name};
     }
 
-    public void set${col.propertyName?capitalize}(final ${col.jvType} ${col.propertyName}) {
-        this.${col.propertyName} = ${col.propertyName};
+    public void set${column.name?capitalize}(final ${column.jvType} ${column.name}) {
+        this.${column.name} = ${column.name};
     }
 
 </#list>
-<#if table.primaryKeys??>
-<#list table.primaryKeys as key>
+<#if table.primaryKey??>
     public static class Pk implements Serializable {
-    <#list key.getColumnsOfKey() as col>
-        private ${table.getColumn(col).jvType} ${table.getColumn(col).propertyName};
+    <#list table.primaryKey.getColumnsOfKey() as col>
+        private ${table.getColumn(col).jvType} ${table.getColumn(col).name};
 
     </#list>
-        public Pk(<#list key.getColumnsOfKey() as col>${table.getColumn(col).jvType} ${table.getColumn(col).propertyName}<#if col?has_next>, </#if></#list>) {
-        <#list key.getColumnsOfKey() as col>
-            this.${table.getColumn(col).propertyName} = ${table.getColumn(col).propertyName};
+        public Pk(<#list table.primaryKey.getColumnsOfKey() as col>${table.getColumn(col).jvType} ${table.getColumn(col).name}<#if col?has_next>, </#if></#list>) {
+        <#list table.primaryKey.getColumnsOfKey() as col>
+            this.${table.getColumn(col).name} = ${table.getColumn(col).name};
         </#list>
         }
 
-    <#list key.getColumnsOfKey() as col>
-        public ${table.getColumn(col).jvType} get${table.getColumn(col).propertyName?capitalize}() {
-            return this.${table.getColumn(col).propertyName};
+    <#list table.primaryKey.getColumnsOfKey() as col>
+        public ${table.getColumn(col).jvType} get${table.getColumn(col).name?capitalize}() {
+            return this.${table.getColumn(col).name};
         }
 
     </#list>
     }
 
-</#list>
 </#if>
 }

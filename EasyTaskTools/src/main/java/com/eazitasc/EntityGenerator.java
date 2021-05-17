@@ -1,6 +1,7 @@
 package com.eazitasc;
 
-import com.eazitasc.binding.Key;
+import com.eazitasc.binding.Column;
+import com.eazitasc.binding.ForeignKey;
 import com.eazitasc.binding.Table;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -45,13 +46,13 @@ public class EntityGenerator {
     public static void main(String[] args) {
         final List<String> changedXmlFiles = getChangedEntityXmlFiles();
         System.out.println("Generating entity for xml files: ");
-        HashMap<String, Set<Key>> foreignKeys = new HashMap<>();
+        HashMap<String, Set<ForeignKey>> foreignKeys = new HashMap<>();
         changedXmlFiles.forEach(filePath -> {
-            Set<Key> foreignKeysOfEntity = generateEntityObjectFromXmlFile(filePath);
+            List<ForeignKey> foreignKeysOfEntity = generateEntityObjectFromXmlFile(filePath);
             if (foreignKeysOfEntity != null && !foreignKeysOfEntity.isEmpty()) {
                 foreignKeysOfEntity.forEach(key -> {
-                    foreignKeys.computeIfAbsent(key.getTargetTable(), k -> new HashSet<>());
-                    foreignKeys.get(key.getTargetTable()).add(key);
+                    foreignKeys.computeIfAbsent(key.getTarget(), k -> new HashSet<>());
+                    foreignKeys.get(key.getTarget()).add(key);
                 });
             }
         });
@@ -60,9 +61,7 @@ public class EntityGenerator {
             Table table = bindXmlToObject(filePath);
             if (table != null) {
                 table.setInverseMappings(new LinkedHashSet<>());
-                keys.forEach(key -> {
-                    table.getInverseMappings().add(key.getMapping());
-                });
+                keys.forEach(key -> table.getInverseMappings().add(key.getTargetMapping()));
                 generateEntity(table, targetName);
             }
         });
@@ -86,15 +85,14 @@ public class EntityGenerator {
         return Collections.emptyList();
     }
 
-    private static Set<Key> generateEntityObjectFromXmlFile(final String filePath) {
+    private static List<ForeignKey> generateEntityObjectFromXmlFile(final String filePath) {
         final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
         System.out.println(fileName + ".xml");
         final Table table = bindXmlToObject(filePath);
         if (table != null) {
             generateEntity(table, fileName);
-            return table.getForeignKeys() == null ? new HashSet<>() : table.getForeignKeys().stream().filter(key -> key.getMapping() != null).collect(Collectors.toSet());
         }
-        return new HashSet<>();
+        return table.getForeignKeys();
     }
 
     private static Table bindXmlToObject(final String filePath) {
@@ -112,27 +110,25 @@ public class EntityGenerator {
 
     private static Table preHandleTable(Table table, final String filePath) {
         final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
+
         if (table.getName() == null) {
             table.setName(fileName);
         }
         table.setName(table.getName().toLowerCase());
-        table.setClassName(StringUtils.capitalize(table.getName()));
+
         if (table.getParent() != null) {
             table.setParent(StringUtils.capitalize(table.getParent().toLowerCase()));
         }
 
-        if (table.getColumn() != null) {
+        if (table.getColumns() != null) {
             final Properties datatypes = getDatatypes(DATATYPE_FILE_PATH);
-            table.getColumn().forEach(column -> {
+            table.getColumns().forEach(column -> {
                 if (column.getName() != null) {
                     column.setName(column.getName().toLowerCase());
                 }
-
-                if (column.getPropertyName() == null) {
-                    column.setPropertyName(column.getName());
-                }
                 if (column.getType().lastIndexOf("enum") != -1) {
                     column.setJvType("String");
+                    column.setIsEnum(Boolean.TRUE);
                 } else if (datatypes.getProperty(column.getType()) != null) {
                     column.setJvType(datatypes.getProperty(column.getType()));
                     column.setDbType(datatypes.getProperty("db." + column.getType()));
@@ -142,38 +138,53 @@ public class EntityGenerator {
             });
         }
 
-        if (table.getKey() != null) {
-            table.getKey().forEach(key -> {
-                if (StringUtils.isNotEmpty(key.getColumns())) {
-                    key.setColumns(key.getColumns().toLowerCase());
-                }
-            });
-            table.setPrimaryKeys(table.getKey().stream().filter(k -> StringUtils.isNotEmpty(k.getType()) && k.getType().equalsIgnoreCase("primary")).collect(Collectors.toCollection(LinkedHashSet::new)));
-            table.getPrimaryKeys().forEach(key -> key.getColumnsOfKey().forEach(keyCol -> table.getColumn().forEach(column -> {
-                if (column.getName().equalsIgnoreCase(keyCol)) {
-                    column.setIsPrimaryKey(true);
-                }
-            })));
-            table.setForeignKeys(table.getKey().stream().filter(k -> StringUtils.isNotEmpty(k.getType()) && k.getType().equalsIgnoreCase("foreign")).collect(Collectors.toCollection(LinkedHashSet::new)));
-            table.setUniqueConstraints(table.getKey().stream().filter(k -> StringUtils.isEmpty(k.getType())).collect(Collectors.toCollection(LinkedHashSet::new)));
+       if (table.getPrimaryKey() != null) {
+           table.getPrimaryKey().setColumns(table.getPrimaryKey().getColumns().toLowerCase());
+
+           table.getPrimaryKey().getColumnsOfKey().forEach(keyCol -> table.getColumns().forEach(column -> {
+               if (column.getName().equalsIgnoreCase(keyCol)) {
+                   column.setIsPrimaryKey(true);
+               }
+           }));
+       }
+
+        if (table.getUniqueConstraints() != null) {
+            table.getUniqueConstraints().forEach(constraint -> constraint.setColumns(constraint.getColumns().toLowerCase()));
+        }
+
+        if (table.getForeignKeys() != null) {
             table.getForeignKeys().forEach(key -> {
-                if (key.getFetch() == null) key.setFetch("");
-                key.setFetch(key.getFetch().toUpperCase());
-                if (key.getMapping() != null) {
-                    if (StringUtils.isEmpty(key.getMapping().getFieldName())) {
-                        key.getMapping().setFieldName("listOf" + table.getClassName());
+                if (StringUtils.isNotEmpty(key.getFetch())) {
+                    key.setFetch(key.getFetch().toUpperCase());
+                }
+
+                if (StringUtils.isNotEmpty(key.getTarget())) {
+                    key.setTarget(StringUtils.capitalize(key.getTarget().toLowerCase()));
+                }
+
+                if (key.getColumns() != null) {
+                    key.getColumns().forEach(column -> {
+                        column.setName(column.getName().toLowerCase());
+                        column.setTarget(column.getTarget().toLowerCase());
+                    });
+                }
+
+                if (key.getTargetMapping() != null) {
+                    if (StringUtils.isEmpty(key.getTargetMapping().getFieldName())) {
+                        key.getTargetMapping().setFieldName("listOf" + StringUtils.capitalize(table.getName()));
                     }
-                    key.getMapping().setFromTable(table.getClassName());
-                    key.getMapping().setMappedBy(key.getFieldName());
-                    if (StringUtils.isNotEmpty(key.getMapping().getOrderBy())) {
-                        key.getMapping().setOrderBy(key.getMapping().getOrderBy().toLowerCase());
+                    key.getTargetMapping().setFromTable(StringUtils.capitalize(table.getName()));
+                    key.getTargetMapping().setMappedBy(key.getFieldName());
+                    if (StringUtils.isNotEmpty(key.getTargetMapping().getOrderBy())) {
+                        key.getTargetMapping().setOrderBy(key.getTargetMapping().getOrderBy().toLowerCase());
                     }
-                    if (StringUtils.isNotEmpty(key.getMapping().getFetch())) {
-                        key.getMapping().setFetch(key.getMapping().getFetch().toUpperCase());
+                    if (StringUtils.isNotEmpty(key.getTargetMapping().getFetch())) {
+                        key.getTargetMapping().setFetch(key.getTargetMapping().getFetch().toUpperCase());
                     }
                 }
             });
         }
+
         return table;
     }
 
@@ -194,19 +205,23 @@ public class EntityGenerator {
                 imports.add("import javax.persistence.Entity;");
                 imports.add("import javax.persistence.Table;");
             }
-            if (!table.getColumn().isEmpty()) {
+            if (!table.getColumns().isEmpty()) {
                 imports.add("import javax.persistence.Column;");
             }
-            if (table.getColumn().stream().anyMatch(column -> column.getJvType().equals("Date"))) {
+            if (table.getColumns().stream().anyMatch(column -> column.getJvType().equals("Date"))) {
                 imports.add("import java.util.Date;");
             }
-            if (table.getColumn().stream().anyMatch(column -> column.getType().equals("version"))) {
+            if (table.getColumns().stream().anyMatch(column -> column.getIsEnum() != null && column.getIsEnum())) {
+                imports.add("import javax.persistence.EnumType;");
+                imports.add("import javax.persistence.Enumerated;");
+            }
+            if (table.getColumns().stream().anyMatch(column -> column.getType().equals("version"))) {
                 imports.add("import javax.persistence.Version;");
             }
-            if (table.getUniqueConstraints() != null && !table.getKey().isEmpty()) {
+            if (table.getUniqueConstraints() != null && !table.getUniqueConstraints().isEmpty()) {
                 imports.add("import javax.persistence.UniqueConstraint;");
             }
-            if (table.getPrimaryKeys() != null && !table.getPrimaryKeys().isEmpty()) {
+            if (table.getPrimaryKey() != null) {
                 imports.add("import javax.persistence.Id;");
                 imports.add("import javax.persistence.IdClass;");
                 imports.add("import java.io.Serializable;");

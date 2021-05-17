@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,29 +28,23 @@ public class Table {
     @XmlAttribute(name = "abstract")
     private Boolean isAbstract;
 
-    @XmlElement
-    private LinkedHashSet<Column> column;
+    @XmlElement(name = "column")
+    private List<Column> columns;
 
-    @XmlElement
-    private LinkedHashSet<Key> key;
+    @XmlElement(name = "primary-key")
+    private PrimaryKey primaryKey;
 
-    @XmlTransient
-    private String className;
+    @XmlElement(name = "unique-constraint")
+    private List<UniqueConstraint> uniqueConstraints;
 
-    @XmlTransient
-    private LinkedHashSet<Key> primaryKeys;
-
-    @XmlTransient
-    private LinkedHashSet<Key> foreignKeys;
+    @XmlElement(name = "foreign-key")
+    private List<ForeignKey> foreignKeys;
 
     @XmlTransient
-    private LinkedHashSet<Key> uniqueConstraints;
+    private LinkedHashSet<ForeignKey.TargetMapping> inverseMappings;
 
-    @XmlTransient
-    private LinkedHashSet<Key.Mapping> inverseMappings;
-
-    public Column getColumn(String columnName) {
-        if (this.column == null) return null;
-        else return this.column.stream().filter(col -> col.getName().equalsIgnoreCase(columnName)).findFirst().orElse(null);
+    public Column getColumn(String name) {
+        if (this.columns == null) return null;
+        else return this.columns.stream().filter(col -> col.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 }

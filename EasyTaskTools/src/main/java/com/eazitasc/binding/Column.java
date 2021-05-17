@@ -9,18 +9,17 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 @Getter
 @Setter
 @ToString
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "table-column")
 public class Column {
     @XmlAttribute(required = true)
     private String name;
-
-    @XmlAttribute
-    private String propertyName;
 
     @XmlAttribute(required = true)
     private String type;
@@ -39,4 +38,7 @@ public class Column {
 
     @XmlTransient
     private Boolean isPrimaryKey;
+
+    @XmlTransient
+    private Boolean isEnum;
 }

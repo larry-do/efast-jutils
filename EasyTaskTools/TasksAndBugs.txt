@@ -1,0 +1,2 @@
+1. Enum chưa viết
+2. Default value chưa viết
