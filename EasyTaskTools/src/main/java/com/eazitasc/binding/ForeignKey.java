@@ -3,7 +3,6 @@ package com.eazitasc.binding;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -11,38 +10,43 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.Arrays;
+import javax.xml.bind.annotation.XmlType;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
-@XmlRootElement
+@XmlRootElement(name = "foreign-key")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Key {
-    @XmlAttribute
-    private String type;
-
-    @XmlAttribute
-    private String targetTable;
-
+public class ForeignKey {
     @XmlAttribute
     private String fieldName;
 
     @XmlAttribute
-    private String fetch;
+    private String target;
 
     @XmlAttribute
-    private String columns;
+    private String fetch;
 
-    @XmlElement
-    private Mapping mapping;
+    @XmlElement(name = "column")
+    private List<Column> columns;
 
-    public LinkedHashSet<String> getColumnsOfKey() {
-        if (StringUtils.isEmpty(this.columns)) return new LinkedHashSet<>();
-        else {
-            return new LinkedHashSet<>(Arrays.asList(columns.replace(" ", "").split(",")));
-        }
+    @XmlElement(name = "target-mapping")
+    private TargetMapping targetMapping;
+
+    @Getter
+    @Setter
+    @ToString
+    @XmlRootElement
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "key-column")
+    public static class Column {
+        @XmlAttribute
+        private String name;
+
+        @XmlAttribute
+        private String target;
     }
 
     @Getter
@@ -50,7 +54,7 @@ public class Key {
     @ToString
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Mapping {
+    public static class TargetMapping {
         @XmlAttribute
         private String fieldName;
 
