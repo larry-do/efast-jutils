@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -35,13 +36,13 @@ public class Table {
     private PrimaryKey primaryKey;
 
     @XmlElement(name = "unique-constraint")
-    private List<UniqueConstraint> uniqueConstraints;
+    private List<UniqueConstraint> uniqueConstraints = new ArrayList<>();
 
     @XmlElement(name = "foreign-key")
-    private List<ForeignKey> foreignKeys;
+    private List<ForeignKey> foreignKeys = new ArrayList<>();
 
     @XmlTransient
-    private LinkedHashSet<ForeignKey.TargetMapping> inverseMappings;
+    private LinkedHashSet<ForeignKey.TargetMapping> inverseMappings = new LinkedHashSet<>();
 
     public Column getColumn(String name) {
         if (this.columns == null) return null;

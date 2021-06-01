@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,7 +30,7 @@ public class ForeignKey {
     private String fetch;
 
     @XmlElement(name = "column")
-    private List<Column> columns;
+    private List<Column> columns = new ArrayList<>();
 
     @XmlElement(name = "target-mapping")
     private TargetMapping targetMapping;

@@ -50,6 +50,21 @@ public class EntityGenerator {
         // packageAndBuild();
     }
 
+    private static HashSet<String> getChangedEntityXmlFiles() {
+        try {
+            System.out.println("Reading repo to get changed entity xml files...");
+            final Git repo = Git.open(new File(PROJECT_ROOT_PATH));
+            final Status status = repo.status().call();
+            return Stream.concat(status.getUntracked().stream(), status.getModified().stream())
+                    .filter(path -> path.startsWith(ENTITY_XML_FOLDER_PATH)).collect(Collectors.toCollection(HashSet::new));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (GitAPIException e) {
+            e.printStackTrace();
+        }
+        return new HashSet<>();
+    }
+
     private static HashSet<Table> parseToTables(HashSet<String> changedXmlFiles) {
         HashSet<Table> tables = new HashSet<>();
         HashMap<String, Set<ForeignKey>> foreignKeys = new HashMap<>();
@@ -80,21 +95,6 @@ public class EntityGenerator {
             }
         });
         return tables;
-    }
-
-    private static HashSet<String> getChangedEntityXmlFiles() {
-        try {
-            System.out.println("Reading repo to get changed entity xml files...");
-            final Git repo = Git.open(new File(PROJECT_ROOT_PATH));
-            final Status status = repo.status().call();
-            return Stream.concat(status.getUntracked().stream(), status.getModified().stream())
-                    .filter(path -> path.startsWith(ENTITY_XML_FOLDER_PATH)).collect(Collectors.toCollection(HashSet::new));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-        }
-        return new HashSet<>();
     }
 
     private static Table bindXmlToObject(final String filePath) {
@@ -135,6 +135,19 @@ public class EntityGenerator {
                     column.setDbType(DATATYPES.getProperty("db." + column.getType()));
                 } else {
                     // todo show error that column xxx of table xxx has invalid datatype
+                }
+                if (StringUtils.isNotEmpty(column.getDefaultValue()) && StringUtils.isNotEmpty(column.getJvType())) {
+                    if (column.getJvType().equals("Date") && column.getDefaultValue().equalsIgnoreCase("current-time")) {
+                        column.setDefaultValue("new Date()"); // todo: temparary value
+                    }
+                }
+
+                if (column.getType().equalsIgnoreCase("version")) {
+                    column.getOtherAnnotations().add("@Version");
+                } else if (column.getType().equalsIgnoreCase("datetime")) {
+                    column.getOtherAnnotations().add("@Temporal(TemporalType.TIMESTAMP)");
+                } else if (column.getType().equalsIgnoreCase("date")) {
+                    column.getOtherAnnotations().add("@Temporal(TemporalType.DATE)");
                 }
             });
         }
@@ -215,6 +228,8 @@ public class EntityGenerator {
             }
             if (table.getColumns().stream().anyMatch(column -> column.getJvType().equals("Date"))) {
                 imports.add("import java.util.Date;");
+                imports.add("import javax.persistence.Temporal;");
+                imports.add("import javax.persistence.TemporalType;");
             }
             if (table.getColumns().stream().anyMatch(column -> column.getIsEnum() != null && column.getIsEnum())) {
                 imports.add("import javax.persistence.EnumType;");

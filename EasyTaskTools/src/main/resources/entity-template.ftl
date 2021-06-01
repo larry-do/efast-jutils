@@ -19,14 +19,14 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
 <#if column.isPrimaryKey??!false>
     @Id
 </#if>
-<#if column.type?lower_case == "version">
-    @Version
-</#if>
+<#list column.otherAnnotations as annotation>
+    ${annotation}
+</#list>
 <#if column.isEnum?? && column.isEnum>
     @Enumerated(EnumType.STRING)
 </#if>
     @Column(name = "${column.name}"<#if column.nullable?? && column.nullable == false>, nullable = false</#if>)
-    private ${column.jvType} ${column.name};
+    private ${column.jvType} ${column.name}<#if column.defaultValue??> = ${column.defaultValue}</#if>;
 
 </#list>
 <#if table.foreignKeys??>
@@ -46,7 +46,7 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
 <#if mapping.orderBy?has_content>
     @OrderBy("${mapping.orderBy}")
 </#if>
-    @OneToMany(targetEntity = void.class<#if mapping.fetch?has_content>, fetch = FetchType.${mapping.fetch}</#if><#if mapping.mappedBy?has_content>, mappedBy = "${mapping.mappedBy}"</#if>)
+    @OneToMany(targetEntity = ${mapping.fromTable}.class<#if mapping.fetch?has_content>, fetch = FetchType.${mapping.fetch}</#if><#if mapping.mappedBy?has_content>, mappedBy = "${mapping.mappedBy}"</#if>)
     public List<${mapping.fromTable}> ${mapping.fieldName};
 
 </#list>
