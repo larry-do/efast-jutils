@@ -72,12 +72,11 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
             this.${table.getColumn(col).name} = ${table.getColumn(col).name};
         </#list>
         }
-
     <#list table.primaryKey.getColumnsOfKey() as col>
+
         public ${table.getColumn(col).jvType} get${table.getColumn(col).name?capitalize}() {
             return this.${table.getColumn(col).name};
         }
-
     </#list>
     }
 

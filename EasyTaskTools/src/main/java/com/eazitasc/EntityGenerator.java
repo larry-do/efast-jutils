@@ -1,6 +1,5 @@
 package com.eazitasc;
 
-import com.eazitasc.binding.Column;
 import com.eazitasc.binding.ForeignKey;
 import com.eazitasc.binding.Table;
 import freemarker.template.Configuration;
@@ -21,11 +20,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -43,17 +40,29 @@ public class EntityGenerator {
 
     private static final String EASYTASK_POM_PATH = "EasyTask/pom.xml";
 
+    private static final Properties DATATYPES = getDatatypes(DATATYPE_FILE_PATH);
+
     public static void main(String[] args) {
-        final List<String> changedXmlFiles = getChangedEntityXmlFiles();
-        System.out.println("Generating entity for xml files: ");
+        final HashSet<String> changedXmlFiles = getChangedEntityXmlFiles();
+        final HashSet<Table> generatedTables = parseToTables(changedXmlFiles);
+        generatedTables.forEach(EntityGenerator::generateEntity);
+        // now, this will create metamodel files
+        // packageAndBuild();
+    }
+
+    private static HashSet<Table> parseToTables(HashSet<String> changedXmlFiles) {
+        HashSet<Table> tables = new HashSet<>();
         HashMap<String, Set<ForeignKey>> foreignKeys = new HashMap<>();
         changedXmlFiles.forEach(filePath -> {
-            List<ForeignKey> foreignKeysOfEntity = generateEntityObjectFromXmlFile(filePath);
-            if (foreignKeysOfEntity != null && !foreignKeysOfEntity.isEmpty()) {
-                foreignKeysOfEntity.forEach(key -> {
-                    foreignKeys.computeIfAbsent(key.getTarget(), k -> new HashSet<>());
-                    foreignKeys.get(key.getTarget()).add(key);
-                });
+            final Table table = bindXmlToObject(filePath);
+            if (table != null) {
+                tables.add(table);
+                if (table.getForeignKeys() != null && !table.getForeignKeys().isEmpty()) {
+                    table.getForeignKeys().forEach(key -> {
+                        foreignKeys.computeIfAbsent(key.getTarget(), k -> new HashSet<>());
+                        foreignKeys.get(key.getTarget()).add(key);
+                    });
+                }
             }
         });
         foreignKeys.forEach((targetName, keys) -> {
@@ -61,38 +70,31 @@ public class EntityGenerator {
             Table table = bindXmlToObject(filePath);
             if (table != null) {
                 table.setInverseMappings(new LinkedHashSet<>());
-                keys.forEach(key -> table.getInverseMappings().add(key.getTargetMapping()));
-                generateEntity(table, targetName);
+                keys.forEach(key -> {
+                    if (key.getTargetMapping() != null) {
+                        table.getInverseMappings().add(key.getTargetMapping());
+                    }
+                });
+                tables.removeIf(t -> t.getName().equals(table.getName()));
+                tables.add(table);
             }
         });
-
-        // now, this will create metamodel files
-        // packageAndBuild();
+        return tables;
     }
 
-    private static List<String> getChangedEntityXmlFiles() {
+    private static HashSet<String> getChangedEntityXmlFiles() {
         try {
             System.out.println("Reading repo to get changed entity xml files...");
             final Git repo = Git.open(new File(PROJECT_ROOT_PATH));
             final Status status = repo.status().call();
             return Stream.concat(status.getUntracked().stream(), status.getModified().stream())
-                    .filter(path -> path.startsWith(ENTITY_XML_FOLDER_PATH)).collect(Collectors.toList());
+                    .filter(path -> path.startsWith(ENTITY_XML_FOLDER_PATH)).collect(Collectors.toCollection(HashSet::new));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
-        return Collections.emptyList();
-    }
-
-    private static List<ForeignKey> generateEntityObjectFromXmlFile(final String filePath) {
-        final String fileName = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
-        System.out.println(fileName + ".xml");
-        final Table table = bindXmlToObject(filePath);
-        if (table != null) {
-            generateEntity(table, fileName);
-        }
-        return table.getForeignKeys();
+        return new HashSet<>();
     }
 
     private static Table bindXmlToObject(final String filePath) {
@@ -121,7 +123,6 @@ public class EntityGenerator {
         }
 
         if (table.getColumns() != null) {
-            final Properties datatypes = getDatatypes(DATATYPE_FILE_PATH);
             table.getColumns().forEach(column -> {
                 if (column.getName() != null) {
                     column.setName(column.getName().toLowerCase());
@@ -129,9 +130,9 @@ public class EntityGenerator {
                 if (column.getType().lastIndexOf("enum") != -1) {
                     column.setJvType("String");
                     column.setIsEnum(Boolean.TRUE);
-                } else if (datatypes.getProperty(column.getType()) != null) {
-                    column.setJvType(datatypes.getProperty(column.getType()));
-                    column.setDbType(datatypes.getProperty("db." + column.getType()));
+                } else if (DATATYPES.getProperty(column.getType()) != null) {
+                    column.setJvType(DATATYPES.getProperty(column.getType()));
+                    column.setDbType(DATATYPES.getProperty("db." + column.getType()));
                 } else {
                     // todo show error that column xxx of table xxx has invalid datatype
                 }
@@ -160,6 +161,9 @@ public class EntityGenerator {
 
                 if (StringUtils.isNotEmpty(key.getTarget())) {
                     key.setTarget(StringUtils.capitalize(key.getTarget().toLowerCase()));
+                    if(StringUtils.isEmpty(key.getFieldName())) {
+                        key.setFieldName(key.getTarget().toLowerCase());
+                    }
                 }
 
                 if (key.getColumns() != null) {
@@ -188,9 +192,10 @@ public class EntityGenerator {
         return table;
     }
 
-    private static void generateEntity(final Table table, final String fileName) {
+    private static void generateEntity(final Table table) {
         try {
-            final String fileNameWithExt = StringUtils.capitalize(fileName.toLowerCase().concat(".java"));
+            final String fileNameWithExt = StringUtils.capitalize(table.getName().toLowerCase().concat(".java"));
+            System.out.println(fileNameWithExt);
             final Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
             cfg.setDefaultEncoding("UTF-8");
             cfg.setDirectoryForTemplateLoading(new File(ENTITY_TEMPLATE_DIR));
