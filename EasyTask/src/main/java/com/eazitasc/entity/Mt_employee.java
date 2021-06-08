@@ -22,13 +22,13 @@ import javax.persistence.UniqueConstraint;
 public class Mt_employee extends Auditable_entity {
 
     @Id
-    @Column(name = "employee_code", nullable = false)
+    @Column(name = "employee_code", nullable = false, columnDefinition = "varchar(20)")
     private String employee_code;
 
-    @Column(name = "short_name", nullable = false)
+    @Column(name = "short_name", nullable = false, columnDefinition = "varchar(100)")
     private String short_name;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "full_name", nullable = false, columnDefinition = "varchar(100)")
     private String full_name;
 
     @Enumerated(EnumType.STRING)
@@ -36,23 +36,23 @@ public class Mt_employee extends Auditable_entity {
     private GenderEnum gender;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "date_of_birth")
+    @Column(name = "date_of_birth", columnDefinition = "date")
     private Date date_of_birth;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "date_of_joining")
+    @Column(name = "date_of_joining", columnDefinition = "date")
     private Date date_of_joining;
 
-    @Column(name = "company_email")
+    @Column(name = "company_email", columnDefinition = "varchar(150)")
     private String company_email;
 
-    @Column(name = "personal_email")
+    @Column(name = "personal_email", columnDefinition = "varchar(150)")
     private String personal_email;
 
-    @Column(name = "address")
+    @Column(name = "address", columnDefinition = "varchar(4000)")
     private String address;
 
-    @Column(name = "mobile_phone")
+    @Column(name = "mobile_phone", columnDefinition = "varchar(30)")
     private String mobile_phone;
 
     @OneToMany(targetEntity = Mt_department.class, mappedBy = "chiefOfDepartment")

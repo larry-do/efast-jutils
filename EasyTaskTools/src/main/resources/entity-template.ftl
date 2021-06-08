@@ -25,7 +25,7 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
 <#if column.isEnum?? && column.isEnum>
     @Enumerated(EnumType.STRING)
 </#if>
-    @Column(name = "${column.name}"<#if column.nullable?? && column.nullable == false>, nullable = false</#if>)
+    @Column(name = "${column.name}"<#if column.nullable?? && column.nullable == false>, nullable = false</#if><#if column.dbType?? && column.dbType?has_content>, columnDefinition = "${column.dbType}"</#if>)
     private ${column.jvType} ${column.name}<#if column.defaultValue??> = ${column.defaultValue}</#if>;
 
 </#list>

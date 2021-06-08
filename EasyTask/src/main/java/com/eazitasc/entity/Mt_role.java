@@ -14,10 +14,10 @@ import javax.persistence.UniqueConstraint;
 public class Mt_role extends Auditable_entity {
 
     @Id
-    @Column(name = "role_code", nullable = false)
+    @Column(name = "role_code", nullable = false, columnDefinition = "varchar(20)")
     private String role_code;
 
-    @Column(name = "role_name", nullable = false)
+    @Column(name = "role_name", nullable = false, columnDefinition = "varchar(100)")
     private String role_name;
 
     public String getRole_code() {

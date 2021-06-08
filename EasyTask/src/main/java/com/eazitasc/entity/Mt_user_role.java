@@ -17,11 +17,11 @@ import javax.persistence.Table;
 public class Mt_user_role extends Auditable_entity {
 
     @Id
-    @Column(name = "user_code", nullable = false)
+    @Column(name = "user_code", nullable = false, columnDefinition = "varchar(20)")
     private String user_code;
 
     @Id
-    @Column(name = "role_code", nullable = false)
+    @Column(name = "role_code", nullable = false, columnDefinition = "varchar(20)")
     private String role_code;
 
     @ManyToOne(fetch = FetchType.LAZY)

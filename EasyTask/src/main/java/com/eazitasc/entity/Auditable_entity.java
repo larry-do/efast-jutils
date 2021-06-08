@@ -10,22 +10,22 @@ import javax.persistence.Version;
 @MappedSuperclass
 public abstract class Auditable_entity {
 
-    @Column(name = "created_by")
+    @Column(name = "created_by", columnDefinition = "varchar(20)")
     private String created_by;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_datetime")
+    @Column(name = "created_datetime", columnDefinition = "date")
     private Date created_datetime = new Date();
 
-    @Column(name = "last_updated_by")
+    @Column(name = "last_updated_by", columnDefinition = "varchar(20)")
     private String last_updated_by;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_updated_datetime")
+    @Column(name = "last_updated_datetime", columnDefinition = "date")
     private Date last_updated_datetime;
 
     @Version
-    @Column(name = "object_version")
+    @Column(name = "object_version", columnDefinition = "integer")
     private Integer object_version = 0;
 
     public String getCreated_by() {

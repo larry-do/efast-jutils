@@ -18,19 +18,19 @@ import javax.persistence.UniqueConstraint;
 public class Mt_user extends Auditable_entity {
 
     @Id
-    @Column(name = "user_code", nullable = false)
+    @Column(name = "user_code", nullable = false, columnDefinition = "varchar(20)")
     private String user_code;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, columnDefinition = "varchar(100)")
     private String username;
 
-    @Column(name = "encrypted_password", nullable = false)
+    @Column(name = "encrypted_password", nullable = false, columnDefinition = "varchar(100)")
     private String encrypted_password;
 
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "is_active", nullable = false, columnDefinition = "boolean")
     private Boolean is_active = false;
 
-    @Column(name = "employee_code", nullable = false)
+    @Column(name = "employee_code", nullable = false, columnDefinition = "varchar(20)")
     private String employee_code;
 
     @ManyToOne(fetch = FetchType.LAZY)
