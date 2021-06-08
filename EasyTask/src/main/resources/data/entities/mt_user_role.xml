@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<table name="MT_USER_ROLE" parent="AUDITABLE_ENTITY">
+  <column name="USER_CODE" type="code" nullable="false"/>
+  <column name="ROLE_CODE" type="code" nullable="false"/>
+
+  <foreign-key target="MT_USER" fetch="lazy">
+    <column name="USER_CODE" target="USER_CODE"/>
+  </foreign-key>
+
+  <foreign-key target="MT_ROLE" fetch="lazy">
+    <column name="ROLE_CODE" target="ROLE_CODE"/>
+  </foreign-key>
+
+  <primary-key columns="USER_CODE, ROLE_CODE"/>
+</table>

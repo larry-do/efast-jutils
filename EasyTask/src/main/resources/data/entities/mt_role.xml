@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<table name="MT_ROLE" parent="AUDITABLE_ENTITY">
+  <column name="ROLE_CODE" type="code" nullable="false"/>
+  <column name="ROLE_NAME" type="name" nullable="false"/>
+
+  <primary-key columns="ROLE_CODE"/>
+  <unique-constraint columns="ROLE_NAME"/>
+</table>

@@ -6,13 +6,23 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,9 +30,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -32,11 +45,20 @@ import java.util.stream.Stream;
 
 public class EntityGenerator {
     private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir");
-    private static final String ENTITY_XML_FOLDER_PATH = "EasyTask/src/main/resources/entities";
-    private static final String DATATYPE_FILE_PATH = "EasyTaskTools/src/main/resources/datatypes.properties";
-    private static final String ENTITY_TEMPLATE_DIR = "EasyTaskTools/src/main/resources";
-    private static final String ENTITY_TEMPLATE = "entity-template.ftl";
+
+    private static final String ENTITY_XML_FOLDER_PATH = "EasyTask/src/main/resources/data/entities";
     private static final String ENTITY_JAVA_FOLDER_PATH = "EasyTask/src/main/java/com/eazitasc/entity";
+    private static final String ENTITY_JAVA_PACKAGE = "com.eazitasc.entity";
+
+
+    private static final String ENUM_XML_FILE_PATH = "EasyTask/src/main/resources/data/enum-types.xml";
+    private static final String ENUM_JAVA_FOLDER_PATH = "EasyTask/src/main/java/com/eazitasc/enumtype";
+    private static final String ENUM_JAVA_PACKAGE = "com.eazitasc.enumtype";
+
+    private static final String DATATYPE_FILE_PATH = "EasyTaskTools/src/main/resources/datatypes.properties";
+    private static final String TEMPLATE_DIR = "EasyTaskTools/src/main/resources";
+    private static final String ENTITY_TEMPLATE = "entity-template.ftl";
+    private static final String ENUM_TEMPLATE = "enum-template.ftl";
 
     private static final String EASYTASK_POM_PATH = "EasyTask/pom.xml";
 
@@ -48,11 +70,14 @@ public class EntityGenerator {
         generatedTables.forEach(EntityGenerator::generateEntity);
         // now, this will create metamodel files
         // packageAndBuild();
+
+        // Generate Enum Types
+        generateEnumTypes();
     }
 
     private static HashSet<String> getChangedEntityXmlFiles() {
         try {
-            System.out.println("Reading repo to get changed entity xml files...");
+            System.out.println("------------ READING REPO TO GET CHANGED ENTITY XML FILES -----------------");
             final Git repo = Git.open(new File(PROJECT_ROOT_PATH));
             final Status status = repo.status().call();
             return Stream.concat(status.getUntracked().stream(), status.getModified().stream())
@@ -128,8 +153,12 @@ public class EntityGenerator {
                     column.setName(column.getName().toLowerCase());
                 }
                 if (column.getType().lastIndexOf("enum") != -1) {
-                    column.setJvType("String");
                     column.setIsEnum(Boolean.TRUE);
+                    String enumName = "";
+                    for (String s : column.getType().split("-")) {
+                        enumName = enumName + StringUtils.capitalize(s);
+                    }
+                    column.setJvType(enumName);
                 } else if (DATATYPES.getProperty(column.getType()) != null) {
                     column.setJvType(DATATYPES.getProperty(column.getType()));
                     column.setDbType(DATATYPES.getProperty("db." + column.getType()));
@@ -211,10 +240,11 @@ public class EntityGenerator {
             System.out.println(fileNameWithExt);
             final Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
             cfg.setDefaultEncoding("UTF-8");
-            cfg.setDirectoryForTemplateLoading(new File(ENTITY_TEMPLATE_DIR));
+            cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_DIR));
             final Template template = cfg.getTemplate(ENTITY_TEMPLATE);
             Map<String, Object> params = new HashMap<>();
             params.put("table", table);
+            params.put("package", ENTITY_JAVA_PACKAGE);
 
             TreeSet<String> imports = new TreeSet<>();
             if (table.getIsAbstract() != null && table.getIsAbstract()) {
@@ -234,6 +264,9 @@ public class EntityGenerator {
             if (table.getColumns().stream().anyMatch(column -> column.getIsEnum() != null && column.getIsEnum())) {
                 imports.add("import javax.persistence.EnumType;");
                 imports.add("import javax.persistence.Enumerated;");
+                table.getColumns().stream().filter(column -> column.getIsEnum() != null && column.getIsEnum()).forEach(column -> {
+                    imports.add("import " + ENUM_JAVA_PACKAGE + "." + column.getJvType() + ";");
+                });
             }
             if (table.getColumns().stream().anyMatch(column -> column.getType().equals("version"))) {
                 imports.add("import javax.persistence.Version;");
@@ -300,6 +333,60 @@ public class EntityGenerator {
                 System.out.println(line);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void generateEnumTypes() {
+        try {
+            System.out.println("-------------- GENERATING ENUM TYPES -------------");
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new File(ENUM_XML_FILE_PATH));
+            doc.getDocumentElement().normalize();
+            NodeList nodes = doc.getElementsByTagName("enum");
+            for (int i = 0; i < nodes.getLength(); i++) {
+                Node node = nodes.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) node;
+                    parseToEnumJavaType(element);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void parseToEnumJavaType(Element element) {
+        String name = element.getAttribute("name");
+        String[] values = element.getAttribute("values").replace(" ", "").toUpperCase().split(",");
+        List<Pair<String, String>> pairs = new ArrayList<>();
+        for (String value : values) {
+            pairs.add(Pair.of(value.substring(0, value.indexOf('(')), value.substring(value.indexOf('(') + 1, value.lastIndexOf(')'))));
+        }
+
+        String fileName = "";
+        for (String s : name.split("-")) {
+            fileName = fileName + StringUtils.capitalize(s);
+        }
+        final String fileNameWithExt = StringUtils.capitalize(fileName.concat(".java"));
+        System.out.print(fileName);
+        System.out.println(Arrays.toString(values));
+        try {
+            final Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
+            cfg.setDefaultEncoding("UTF-8");
+            cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_DIR));
+            final Template template = cfg.getTemplate(ENUM_TEMPLATE);
+            Map<String, Object> params = new HashMap<>();
+            params.put("package", ENUM_JAVA_PACKAGE);
+            params.put("fileName", fileName);
+            params.put("values", pairs);
+            FileWriter writer = new FileWriter(new File(ENUM_JAVA_FOLDER_PATH + "/" + fileNameWithExt));
+            template.process(params, writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
     }

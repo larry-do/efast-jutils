@@ -1,4 +1,4 @@
-package com.eazitasc.entity;
+package ${package};
 
 <#list imports as import>
 ${import}

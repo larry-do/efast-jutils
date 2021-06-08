@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<table name="MT_EMPLOYEE" parent="AUDITABLE_ENTITY">
+  <column name="EMPLOYEE_CODE" type="code" nullable="false"/>
+  <column name="SHORT_NAME" type="name" nullable="false"/>
+  <column name="FULL_NAME" type="name" nullable="false"/>
+  <column name="GENDER" type="gender-enum"/>
+  <column name="DATE_OF_BIRTH" type="date"/>
+  <column name="DATE_OF_JOINING" type="date"/>
+  <column name="COMPANY_EMAIL" type="email"/>
+  <column name="PERSONAL_EMAIL" type="email"/>
+  <column name="ADDRESS" type="desc"/>
+  <column name="MOBILE_PHONE" type="phone-number"/>
+
+  <primary-key columns="EMPLOYEE_CODE"/>
+  <unique-constraint columns="SHORT_NAME"/>
+  <unique-constraint columns="COMPANY_EMAIL"/>
+  <unique-constraint columns="PERSONAL_EMAIL"/>
+  <unique-constraint columns="MOBILE_PHONE"/>
+</table>

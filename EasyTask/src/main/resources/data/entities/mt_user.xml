@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<table name="MT_USER" parent="AUDITABLE_ENTITY">
+  <column name="USER_CODE" type="code" nullable="false"/>
+  <column name="USERNAME" type="name" nullable="false"/>
+  <column name="ENCRYPTED_PASSWORD" type="name" nullable="false"/>
+  <column name="IS_ACTIVE" type="boolean" nullable="false" default="false"/>
+  <column name="EMPLOYEE_CODE" type="code" nullable="false"/>
+
+  <primary-key columns="USER_CODE"/>
+  <unique-constraint columns="USERNAME"/>
+  <unique-constraint columns="EMPLOYEE_CODE"/>
+  <foreign-key target="MT_EMPLOYEE" fetch="lazy">
+    <column name="EMPLOYEE_CODE" target="EMPLOYEE_CODE"/>
+  </foreign-key>
+</table>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<enums>
+  <enum name="gender-enum" values="male(m), female(f), other(o)"/>
+  <enum name="boolean-enum" values="yes(y), no(n)"/>
+  <enum name="state-enum" values="active(a), inactive(ia)"/>
+</enums>
