@@ -1,6 +1,7 @@
 package com.eazitasc.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,9 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "mt_department", uniqueConstraints = {@UniqueConstraint(columnNames = {"department_name"}), @UniqueConstraint(columnNames = {"abbreviation"})})
 @IdClass(Mt_department.Pk.class)
 public class Mt_department extends Auditable_entity {
+
+    public Mt_department(){
+    }
 
     @Id
     @Column(name = "department_code", nullable = false, columnDefinition = "varchar(20)")
@@ -35,8 +39,7 @@ public class Mt_department extends Auditable_entity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
-        @JoinColumn(name="chief_code", referencedColumnName = "employee_code", insertable = false, updatable = false), 
-        @JoinColumn(name="abbreviation", referencedColumnName = "short_name", insertable = false, updatable = false)
+        @JoinColumn(name="chief_code", referencedColumnName = "employee_code", insertable = false, updatable = false)
     })
     public Mt_employee chiefOfDepartment;
 
@@ -83,12 +86,28 @@ public class Mt_department extends Auditable_entity {
     public static class Pk implements Serializable {
         private String department_code;
 
+        public Pk(){
+        }
+
         public Pk(String department_code) {
             this.department_code = department_code;
         }
 
         public String getDepartment_code() {
             return this.department_code;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pk pk = (Pk) o;
+            return Objects.equals(department_code, pk.department_code);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(department_code);
         }
     }
 

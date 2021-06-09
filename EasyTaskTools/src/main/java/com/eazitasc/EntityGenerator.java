@@ -354,6 +354,7 @@ public class EntityGenerator {
                 imports.add("import javax.persistence.Id;");
                 imports.add("import javax.persistence.IdClass;");
                 imports.add("import java.io.Serializable;");
+                imports.add("import java.util.Objects;");
             }
             if (table.getForeignKeys() != null && !table.getForeignKeys().isEmpty()) {
                 imports.add("import javax.persistence.ManyToOne;");

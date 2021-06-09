@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<table name="SYS_PERSISTENT_LOGIN">
+  <column name="SERIES" type="name" nullable="false"/>
+  <column name="USERNAME" type="name" nullable="false"/>
+  <column name="TOKEN" type="name" nullable="false"/>
+  <column name="LAST_USED" type="datetime" nullable="false"/>
+
+  <primary-key columns="SERIES"/>
+  <unique-constraint columns="TOKEN"/>
+</table>

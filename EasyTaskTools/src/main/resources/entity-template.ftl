@@ -15,6 +15,9 @@ ${import}
 </#if>
 public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.name?capitalize}<#if table.parent??> extends ${table.parent}</#if> {
 
+    public ${table.name?capitalize}(){
+    }
+
 <#list table.columns as column>
 <#if column.isPrimaryKey??!false>
     @Id
@@ -67,6 +70,9 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
         private ${table.getColumn(col).jvType} ${table.getColumn(col).name};
 
     </#list>
+        public Pk(){
+        }
+
         public Pk(<#list table.primaryKey.getColumnsOfKey() as col>${table.getColumn(col).jvType} ${table.getColumn(col).name}<#if col?has_next>, </#if></#list>) {
         <#list table.primaryKey.getColumnsOfKey() as col>
             this.${table.getColumn(col).name} = ${table.getColumn(col).name};
@@ -78,6 +84,19 @@ public<#if table.isAbstract?? && table.isAbstract> abstract</#if> class ${table.
             return this.${table.getColumn(col).name};
         }
     </#list>
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pk pk = (Pk) o;
+            return <#list table.primaryKey.getColumnsOfKey() as col>Objects.equals(${col}, pk.${col})${col?has_next?then(" && ", "")}</#list>;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(<#list table.primaryKey.getColumnsOfKey() as col>${col}${col?has_next?then(", ", "")}</#list>);
+        }
     }
 
 </#if>

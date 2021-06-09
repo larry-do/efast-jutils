@@ -1,6 +1,7 @@
 package com.eazitasc.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,6 +13,9 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "mt_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"role_name"})})
 @IdClass(Mt_role.Pk.class)
 public class Mt_role extends Auditable_entity {
+
+    public Mt_role(){
+    }
 
     @Id
     @Column(name = "role_code", nullable = false, columnDefinition = "varchar(20)")
@@ -39,12 +43,28 @@ public class Mt_role extends Auditable_entity {
     public static class Pk implements Serializable {
         private String role_code;
 
+        public Pk(){
+        }
+
         public Pk(String role_code) {
             this.role_code = role_code;
         }
 
         public String getRole_code() {
             return this.role_code;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pk pk = (Pk) o;
+            return Objects.equals(role_code, pk.role_code);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(role_code);
         }
     }
 

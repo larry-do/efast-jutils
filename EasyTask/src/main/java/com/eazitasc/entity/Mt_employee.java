@@ -4,6 +4,7 @@ import com.eazitasc.enumtype.GenderEnum;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,6 +21,9 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "mt_employee", uniqueConstraints = {@UniqueConstraint(columnNames = {"short_name"}), @UniqueConstraint(columnNames = {"company_email"}), @UniqueConstraint(columnNames = {"personal_email"}), @UniqueConstraint(columnNames = {"mobile_phone"})})
 @IdClass(Mt_employee.Pk.class)
 public class Mt_employee extends Auditable_entity {
+
+    public Mt_employee(){
+    }
 
     @Id
     @Column(name = "employee_code", nullable = false, columnDefinition = "varchar(20)")
@@ -141,12 +145,28 @@ public class Mt_employee extends Auditable_entity {
     public static class Pk implements Serializable {
         private String employee_code;
 
+        public Pk(){
+        }
+
         public Pk(String employee_code) {
             this.employee_code = employee_code;
         }
 
         public String getEmployee_code() {
             return this.employee_code;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pk pk = (Pk) o;
+            return Objects.equals(employee_code, pk.employee_code);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(employee_code);
         }
     }
 
