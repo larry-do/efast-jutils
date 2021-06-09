@@ -29,6 +29,9 @@ public class Table {
     @XmlAttribute(name = "abstract")
     private Boolean isAbstract;
 
+    @XmlAttribute
+    private String repository;
+
     @XmlElement(name = "column")
     private List<Column> columns;
 

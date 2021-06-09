@@ -1,6 +1,6 @@
 package com.eazitasc.repository;
 
-public interface EasyRepo<E, Pk> {
+public interface EasyRepoInterface<E, Pk> {
     void create(E entity);
 
     void update(E entity);

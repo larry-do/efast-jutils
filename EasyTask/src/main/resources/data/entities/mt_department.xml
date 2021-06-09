@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<table name="MT_DEPARTMENT" parent="AUDITABLE_ENTITY">
+<table name="MT_DEPARTMENT" parent="AUDITABLE_ENTITY" repository="Department">
   <column name="DEPARTMENT_CODE" type="code" nullable="false"/>
   <column name="DEPARTMENT_NAME" type="name" nullable="false"/>
   <column name="ABBREVIATION" type="code" nullable="false"/>

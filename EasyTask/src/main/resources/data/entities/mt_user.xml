@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<table name="MT_USER" parent="AUDITABLE_ENTITY">
+<table name="MT_USER" parent="AUDITABLE_ENTITY" repository="User">
   <column name="USER_CODE" type="code" nullable="false"/>
   <column name="USERNAME" type="name" nullable="false"/>
   <column name="ENCRYPTED_PASSWORD" type="name" nullable="false"/>

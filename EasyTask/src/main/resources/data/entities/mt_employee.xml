@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="us-ascii"?>
-<table name="MT_EMPLOYEE" parent="AUDITABLE_ENTITY">
+<table name="MT_EMPLOYEE" parent="AUDITABLE_ENTITY" repository="employee">
   <column name="EMPLOYEE_CODE" type="code" nullable="false"/>
   <column name="SHORT_NAME" type="name" nullable="false"/>
   <column name="FULL_NAME" type="name" nullable="false"/>

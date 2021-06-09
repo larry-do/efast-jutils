@@ -5,6 +5,7 @@ import com.eazitasc.binding.Table;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.utility.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
@@ -48,8 +49,9 @@ public class EntityGenerator {
 
     private static final String ENTITY_XML_FOLDER_PATH = "EasyTask/src/main/resources/data/entities";
     private static final String ENTITY_JAVA_FOLDER_PATH = "EasyTask/src/main/java/com/eazitasc/entity";
+    private static final String REPOSITORY_JAVA_FOLDER_PATH = "EasyTask/src/main/java/com/eazitasc/repository";
     private static final String ENTITY_JAVA_PACKAGE = "com.eazitasc.entity";
-
+    private static final String REPOSITORY_JAVA_PACKAGE = "com.eazitasc.repository";
 
     private static final String ENUM_XML_FILE_PATH = "EasyTask/src/main/resources/data/enum-types.xml";
     private static final String ENUM_JAVA_FOLDER_PATH = "EasyTask/src/main/java/com/eazitasc/enumtype";
@@ -58,6 +60,8 @@ public class EntityGenerator {
     private static final String DATATYPE_FILE_PATH = "EasyTaskTools/src/main/resources/datatypes.properties";
     private static final String TEMPLATE_DIR = "EasyTaskTools/src/main/resources";
     private static final String ENTITY_TEMPLATE = "entity-template.ftl";
+    private static final String REPOSITORY_INTERFACE_TEMPLATE = "repo-interface-template.ftl";
+    private static final String REPOSITORY_IMPLEMENT_TEMPLATE = "repo-implement-template.ftl";
     private static final String ENUM_TEMPLATE = "enum-template.ftl";
 
     private static final String EASYTASK_POM_PATH = "EasyTask/pom.xml";
@@ -71,8 +75,80 @@ public class EntityGenerator {
         // now, this will create metamodel files
         // packageAndBuild();
 
+        // generate repositories of entities
+        System.out.println("-------------- GENERATING REPOSITORIES OF ENTITIES -------------------");
+        generatedTables.stream().filter(table -> StringUtils.isNotEmpty(table.getRepository())).forEach(table -> {
+            generateRepositoryInterface(table);
+            generateRepositoryImplement(table);
+        });
+
         // Generate Enum Types
         generateEnumTypes();
+    }
+
+    private static void generateRepositoryInterface(final Table table) {
+        final String fileName = StringUtils.capitalize(table.getRepository().toLowerCase()) + "Repository";
+        final String fileNameWithExt = fileName + ".java";
+        System.out.println(fileNameWithExt);
+        try {
+            final Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
+            cfg.setDefaultEncoding("UTF-8");
+            cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_DIR));
+            final Template template = cfg.getTemplate(REPOSITORY_INTERFACE_TEMPLATE);
+            Map<String, Object> params = new HashMap<>();
+            params.put("package", REPOSITORY_JAVA_PACKAGE);
+            params.put("fileName", fileName);
+            params.put("table", table);
+
+            TreeSet<String> imports = new TreeSet<>();
+            imports.add("import " + ENTITY_JAVA_PACKAGE + "." + StringUtils.capitalize(table.getName()) + ";");
+            params.put("imports", imports);
+
+            FileWriter writer = new FileWriter(new File(REPOSITORY_JAVA_FOLDER_PATH + "/" + fileNameWithExt));
+            template.process(params, writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void generateRepositoryImplement(final Table table) {
+        final String repoName = StringUtils.capitalize(table.getRepository().toLowerCase()) + "Repository";
+        final String fileName = repoName + "Impl";
+        final String fileNameWithExt = fileName + ".java";
+        System.out.println(fileNameWithExt);
+        try {
+            final Configuration cfg = new Configuration(Configuration.VERSION_2_3_31);
+            cfg.setDefaultEncoding("UTF-8");
+            cfg.setDirectoryForTemplateLoading(new File(TEMPLATE_DIR));
+            final Template template = cfg.getTemplate(REPOSITORY_IMPLEMENT_TEMPLATE);
+            Map<String, Object> params = new HashMap<>();
+            params.put("package", REPOSITORY_JAVA_PACKAGE);
+            params.put("fileName", fileName);
+            params.put("repoName", repoName);
+            params.put("table", table);
+
+            TreeSet<String> imports = new TreeSet<>();
+            imports.add("import " + ENTITY_JAVA_PACKAGE + "." + StringUtils.capitalize(table.getName()) + ";");
+            imports.add("import org.springframework.stereotype.Repository;");
+            imports.add("import org.springframework.transaction.annotation.Transactional;");
+            if (table.getUniqueConstraints().size() > 0) {
+                imports.add("import " + ENTITY_JAVA_PACKAGE + "." + StringUtils.capitalize(table.getName()) + "_;");
+                imports.add("import javax.persistence.criteria.CriteriaBuilder;");
+                imports.add("import javax.persistence.criteria.CriteriaQuery;");
+                imports.add("import javax.persistence.criteria.Root;");
+            }
+
+            params.put("imports", imports);
+
+            FileWriter writer = new FileWriter(new File(REPOSITORY_JAVA_FOLDER_PATH + "/" + fileNameWithExt));
+            template.process(params, writer);
+            writer.flush();
+            writer.close();
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
     }
 
     private static HashSet<String> getChangedEntityXmlFiles() {
