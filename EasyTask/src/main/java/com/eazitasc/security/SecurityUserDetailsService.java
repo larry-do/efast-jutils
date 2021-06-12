@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
-@Service(value = "CustomUserDetailsService")
+@Service(value = "SecurityUserDetailsService")
 @Transactional(readOnly = true)
 public class SecurityUserDetailsService implements UserDetailsService {
 
@@ -33,18 +33,16 @@ public class SecurityUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Mt_user mt_user = this.userRepository.getByUsername(username);
-        if (mt_user == null) {
-            throw new UsernameNotFoundException("Can't find user");
-        }
+
         User user = new User(mt_user.getUsername(), mt_user.getEncrypted_password(), mt_user.getIs_active(),
                 true, true, true, new ArrayList<GrantedAuthority>());
         return user;
     }
 
     public void expireUserSession(String username) {
-        User user = (User) sessionRegistry.getAllPrincipals().stream().filter(principal -> principal instanceof User && ((User) principal).getUsername().equals(username)).findFirst().orElse(null);
+        User user = (User) this.sessionRegistry.getAllPrincipals().stream().filter(principal -> principal instanceof User && ((User) principal).getUsername().equals(username)).findFirst().orElse(null);
         if (user != null) {
-            sessionRegistry.getAllSessions(user, true).forEach(SessionInformation::expireNow);
+            this.sessionRegistry.getAllSessions(user, true).forEach(SessionInformation::expireNow);
         }
     }
 }

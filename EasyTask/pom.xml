@@ -50,13 +50,11 @@
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>com.eazitasc</groupId>
             <artifactId>EasyTaskCommon</artifactId>
             <version>1.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -72,11 +70,11 @@
             <artifactId>spring-boot-starter-mail</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>

@@ -5,6 +5,7 @@
   <column name="ENCRYPTED_PASSWORD" type="name" nullable="false"/>
   <column name="IS_ACTIVE" type="boolean" nullable="false" default="false"/>
   <column name="EMPLOYEE_CODE" type="code" nullable="false"/>
+  <column name="ALLOW_JWT_AUTH" type="boolean"/>
 
   <primary-key columns="USER_CODE"/>
   <unique-constraint columns="USERNAME"/>
