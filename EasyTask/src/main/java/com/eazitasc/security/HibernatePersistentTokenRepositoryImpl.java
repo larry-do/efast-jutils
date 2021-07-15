@@ -1,6 +1,7 @@
 package com.eazitasc.security;
 
 import com.eazitasc.entity.Sys_persistent_login;
+import com.eazitasc.util.EasyUtils;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Repository;
@@ -31,8 +32,7 @@ public class HibernatePersistentTokenRepositoryImpl implements PersistentTokenRe
     public PersistentRememberMeToken getTokenForSeries(String series) {
         Sys_persistent_login persistentLogin = this.entityManager.find(Sys_persistent_login.class, series);
         if (persistentLogin == null) return null;
-        return new PersistentRememberMeToken(persistentLogin.getUsername(),
-                persistentLogin.getSeries(), persistentLogin.getToken(), persistentLogin.getLast_used());
+        return new PersistentRememberMeToken(persistentLogin.getUsername(), persistentLogin.getSeries(), persistentLogin.getToken(), persistentLogin.getLast_used());
     }
 
     @Override

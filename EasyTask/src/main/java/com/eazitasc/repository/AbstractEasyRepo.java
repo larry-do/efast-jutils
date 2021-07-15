@@ -15,6 +15,7 @@ public abstract class AbstractEasyRepo<E, Pk> implements EasyRepoInterface<E, Pk
     protected EntityManager entityManager;
 
     protected AbstractEasyRepo() {
+        //noinspection unchecked
         this.entityClazz = (Class<E>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 

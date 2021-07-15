@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../EasyTaskCommon/EasyTaskCommon.iml" filepath="$PROJECT_DIR$/../EasyTaskCommon/EasyTaskCommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../EasyTaskTools/EasyTaskTools.iml" filepath="$PROJECT_DIR$/../EasyTaskTools/EasyTaskTools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easytask.iml" filepath="$PROJECT_DIR$/easytask.iml" />
+    </modules>
+  </component>
+</project>

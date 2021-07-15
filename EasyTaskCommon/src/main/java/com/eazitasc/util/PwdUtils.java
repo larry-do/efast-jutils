@@ -6,9 +6,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
-public class PasswordUtils {
+public class PwdUtils {
 
-    private static final int DEFAULT_STRENGTH = 12;
+    private static final int DEFAULT_STRENGTH = 10;
     private static BCryptPasswordEncoder passwordEncoder;
 
     static {
@@ -48,7 +48,7 @@ public class PasswordUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(PasswordUtils.encryptPassword("123456"));
-        System.out.println(PasswordUtils.generateRandomPassword(8));
+        System.out.println(PwdUtils.encryptPassword("123456"));
+        System.out.println(PwdUtils.generateRandomPassword(8));
     }
 }
