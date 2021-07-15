@@ -5,7 +5,6 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../EasyTaskCommon/pom.xml" />
-        <option value="$PROJECT_DIR$/../EasyTaskTools/pom.xml" />
       </list>
     </option>
   </component>

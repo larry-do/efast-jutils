@@ -1,4 +1,0 @@
-1. data type Enum chưa viết (fix v1)
-2. Default value chưa viết (fix v1)
-3. Data type chưa hoàn chỉnh (mới cơ bản, java type, còn định nghĩa DB type nữa) (fix v1)
-4. Repository (done v1)
