@@ -3,7 +3,6 @@ package com.eazitasc.entity;
 import com.eazitasc.enumtype.GenderEnum;
 import java.util.Date;
 import javax.annotation.Generated;
-import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -13,7 +12,6 @@ public abstract class Mt_employee_ extends com.eazitasc.entity.Auditable_entity_
 
 	public static volatile SingularAttribute<Mt_employee, String> full_name;
 	public static volatile SingularAttribute<Mt_employee, String> address;
-	public static volatile ListAttribute<Mt_employee, Mt_department> listOfMt_department;
 	public static volatile SingularAttribute<Mt_employee, GenderEnum> gender;
 	public static volatile SingularAttribute<Mt_employee, Date> date_of_birth;
 	public static volatile SingularAttribute<Mt_employee, String> mobile_phone;
@@ -25,7 +23,6 @@ public abstract class Mt_employee_ extends com.eazitasc.entity.Auditable_entity_
 
 	public static final String FULL_NAME = "full_name";
 	public static final String ADDRESS = "address";
-	public static final String LIST_OF_MT_DEPARTMENT = "listOfMt_department";
 	public static final String GENDER = "gender";
 	public static final String DATE_OF_BIRTH = "date_of_birth";
 	public static final String MOBILE_PHONE = "mobile_phone";

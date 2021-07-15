@@ -367,7 +367,7 @@ public class EntityGenerator {
         }
     }
 
-    private static void packageAndBuild() {
+    private void packageAndBuild() {
         try {
             ProcessBuilder builder = new ProcessBuilder(
                     "cmd.exe", "/c", "mvn compiler:compile --file " + EASYTASK_POM_PATH);

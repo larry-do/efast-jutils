@@ -59,9 +59,6 @@ public class Mt_employee extends Auditable_entity {
     @Column(name = "mobile_phone", columnDefinition = "varchar(30)")
     private String mobile_phone;
 
-    @OneToMany(targetEntity = Mt_department.class, mappedBy = "chiefOfDepartment")
-    public List<Mt_department> listOfMt_department;
-
     public String getEmployee_code() {
         return this.employee_code;
     }
