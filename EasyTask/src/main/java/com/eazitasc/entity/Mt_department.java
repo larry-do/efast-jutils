@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "mt_department", uniqueConstraints = {@UniqueConstraint(columnNames = {"department_name"}), @UniqueConstraint(columnNames = {"abbreviation"})})
+@Table(name = "mt_department", uniqueConstraints = {@UniqueConstraint(columnNames = {"department_name"}), @UniqueConstraint(columnNames = {"abbreviationn"})})
 @IdClass(Mt_department.Pk.class)
 public class Mt_department extends Auditable_entity {
 
@@ -28,8 +28,8 @@ public class Mt_department extends Auditable_entity {
     @Column(name = "department_name", nullable = false, columnDefinition = "varchar(100)")
     private String department_name;
 
-    @Column(name = "abbreviation", nullable = false, columnDefinition = "varchar(20)")
-    private String abbreviation;
+    @Column(name = "abbreviationn", nullable = false, columnDefinition = "varchar(20)")
+    private String abbreviationn;
 
     @Column(name = "department_desc", columnDefinition = "varchar(4000)")
     private String department_desc;
@@ -59,12 +59,12 @@ public class Mt_department extends Auditable_entity {
         this.department_name = department_name;
     }
 
-    public String getAbbreviation() {
-        return this.abbreviation;
+    public String getAbbreviationn() {
+        return this.abbreviationn;
     }
 
-    public void setAbbreviation(final String abbreviation) {
-        this.abbreviation = abbreviation;
+    public void setAbbreviationn(final String abbreviationn) {
+        this.abbreviationn = abbreviationn;
     }
 
     public String getDepartment_desc() {

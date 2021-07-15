@@ -27,11 +27,11 @@ public class DepartmentRepositoryImpl extends AbstractEasyRepo<Mt_department, Mt
     }
 
     @Override
-    public Mt_department getByAbbreviation(String abbreviation) {
+    public Mt_department getByAbbreviationn(String abbreviationn) {
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Mt_department> cq = cb.createQuery(Mt_department.class);
         Root<Mt_department> root = cq.from(Mt_department.class);
-        cq.where(cb.and(cb.equal(root.get(Mt_department_.abbreviation), abbreviation)));
+        cq.where(cb.and(cb.equal(root.get(Mt_department_.abbreviationn), abbreviationn)));
         return this.entityManager.createQuery(cq.select(root)).getSingleResult();
     }
 

@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EntityGenerator {
+    // remember set working directory Intellij
     private static final String PROJECT_ROOT_PATH = System.getProperty("user.dir");
 
     private static final String ENTITY_XML_FOLDER_PATH = "EasyTask/src/main/resources/data/entities";

@@ -4,5 +4,5 @@
   <column name="CREATED_DATETIME" type="datetime" nullable="true" default="current-time"/>
   <column name="LAST_UPDATED_BY" type="code" nullable="true"/>
   <column name="LAST_UPDATED_DATETIME" type="datetime" nullable="true"/>
-  <column name="OBJECT_VERSION" type="version" nullable="true" default="0"/>
+  <column name="AUDIT_VERSION" type="version" nullable="true" default="0"/>
 </table>

@@ -10,6 +10,9 @@ import javax.persistence.Version;
 @MappedSuperclass
 public abstract class Auditable_entity {
 
+    public Auditable_entity(){
+    }
+
     @Column(name = "created_by", columnDefinition = "varchar(20)")
     private String created_by;
 
@@ -25,8 +28,8 @@ public abstract class Auditable_entity {
     private Date last_updated_datetime;
 
     @Version
-    @Column(name = "object_version", columnDefinition = "integer")
-    private Integer object_version = 0;
+    @Column(name = "audit_version", columnDefinition = "integer")
+    private Integer audit_version = 0;
 
     public String getCreated_by() {
         return this.created_by;
@@ -60,12 +63,12 @@ public abstract class Auditable_entity {
         this.last_updated_datetime = last_updated_datetime;
     }
 
-    public Integer getObject_version() {
-        return this.object_version;
+    public Integer getAudit_version() {
+        return this.audit_version;
     }
 
-    public void setObject_version(final Integer object_version) {
-        this.object_version = object_version;
+    public void setAudit_version(final Integer audit_version) {
+        this.audit_version = audit_version;
     }
 
 }

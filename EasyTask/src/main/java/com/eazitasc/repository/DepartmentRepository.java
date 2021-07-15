@@ -7,5 +7,5 @@ public interface DepartmentRepository extends EasyRepoInterface<Mt_department, M
 
     Mt_department getByDepartment_name(String department_name);
 
-    Mt_department getByAbbreviation(String abbreviation);
+    Mt_department getByAbbreviationn(String abbreviationn);
 }

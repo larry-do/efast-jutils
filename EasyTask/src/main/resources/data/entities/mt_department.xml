@@ -2,13 +2,13 @@
 <table name="MT_DEPARTMENT" parent="AUDITABLE_ENTITY" repository="Department">
   <column name="DEPARTMENT_CODE" type="code" nullable="false"/>
   <column name="DEPARTMENT_NAME" type="name" nullable="false"/>
-  <column name="ABBREVIATION" type="code" nullable="false"/>
+  <column name="ABBREVIATIONn" type="code" nullable="false"/>
   <column name="DEPARTMENT_DESC" type="desc"/>
   <column name="CHIEF_CODE" type="code"/>
 
   <primary-key columns="DEPARTMENT_CODE"/>
   <unique-constraint columns="DEPARTMENT_NAME"/>
-  <unique-constraint columns="ABBREVIATION"/>
+  <unique-constraint columns="ABBREVIATIONn"/>
   <foreign-key fieldName="chiefOfDepartment" target="MT_EMPLOYEE" fetch="lazy">
     <column name="CHIEF_CODE" target="EMPLOYEE_CODE"/>
     <target-mapping fieldName="" fetch="" orderBy=""/>
