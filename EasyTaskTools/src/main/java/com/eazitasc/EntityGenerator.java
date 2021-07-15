@@ -5,7 +5,6 @@ import com.eazitasc.binding.Table;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-import freemarker.template.utility.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
@@ -158,9 +157,7 @@ public class EntityGenerator {
             final Status status = repo.status().call();
             return Stream.concat(status.getUntracked().stream(), status.getModified().stream())
                     .filter(path -> path.startsWith(ENTITY_XML_FOLDER_PATH)).collect(Collectors.toCollection(HashSet::new));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GitAPIException e) {
+        } catch (IOException | GitAPIException e) {
             e.printStackTrace();
         }
         return new HashSet<>();
@@ -375,7 +372,7 @@ public class EntityGenerator {
 
             params.put("imports", imports);
 
-            FileWriter writer = new FileWriter(new File(ENTITY_JAVA_FOLDER_PATH + "/" + fileNameWithExt));
+            FileWriter writer = new FileWriter(ENTITY_JAVA_FOLDER_PATH + "/" + fileNameWithExt);
             template.process(params, writer);
             writer.flush();
             writer.close();
@@ -459,7 +456,7 @@ public class EntityGenerator {
             params.put("package", ENUM_JAVA_PACKAGE);
             params.put("fileName", fileName);
             params.put("values", pairs);
-            FileWriter writer = new FileWriter(new File(ENUM_JAVA_FOLDER_PATH + "/" + fileNameWithExt));
+            FileWriter writer = new FileWriter(ENUM_JAVA_FOLDER_PATH + "/" + fileNameWithExt);
             template.process(params, writer);
             writer.flush();
             writer.close();
