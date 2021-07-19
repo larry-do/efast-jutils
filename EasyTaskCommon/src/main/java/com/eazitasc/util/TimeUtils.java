@@ -21,7 +21,7 @@ public class TimeUtils {
     public static String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     public static String YYYYMMDD_HHMMSS = "yyyyMMdd_HHmmss";
 
-    public static Date getCurrentSystemDate() {
+    public static Date getCurrentSysDate() {
         return new Date();
     }
 

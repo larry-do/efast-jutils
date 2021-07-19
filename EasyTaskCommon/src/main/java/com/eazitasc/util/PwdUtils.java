@@ -8,27 +8,27 @@ import java.util.Random;
 
 public class PwdUtils {
 
-    private static final int DEFAULT_STRENGTH = 10;
-    private static BCryptPasswordEncoder passwordEncoder;
+    private static final int DEFAULT_STRENGTH = 12;
+    private static BCryptPasswordEncoder pwdEncoder;
 
     static {
-        passwordEncoder = new BCryptPasswordEncoder(DEFAULT_STRENGTH);
+        pwdEncoder = new BCryptPasswordEncoder(DEFAULT_STRENGTH);
     }
 
-    public static String encryptPassword(String rawPassword) {
-        return passwordEncoder.encode(rawPassword);
+    public static String encryptRawPwd(String rawPwd) {
+        return pwdEncoder.encode(rawPwd);
     }
 
-    public static boolean checkPasswordMatch(String encryptedPassword, String rawPassword) {
-        return passwordEncoder.matches(rawPassword, encryptedPassword);
+    public static boolean checkPwdMatch(String rawPwd, String encryptedPwd) {
+        return pwdEncoder.matches(rawPwd, encryptedPwd);
     }
 
-    public static String generateRandomPassword(int length) {
+    public static String generateRandomPwd(int length) {
         char[] chars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                        '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
-                        '/', ':', ';', '<', '=', '>', '?', '@', '^', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'};
+                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
+                '/', ':', ';', '<', '=', '>', '?', '@', '^', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'};
         try {
             Random random = SecureRandom.getInstanceStrong();
             StringBuilder stringBuilder = new StringBuilder(length);
@@ -42,12 +42,12 @@ public class PwdUtils {
         return null;
     }
 
-    public static BCryptPasswordEncoder getPasswordEncoder() {
-        return passwordEncoder;
+    public static BCryptPasswordEncoder getPwdEncoder() {
+        return pwdEncoder;
     }
 
     public static void main(String[] args) {
-        System.out.println(PwdUtils.encryptPassword("123456"));
-        System.out.println(PwdUtils.generateRandomPassword(8));
+        System.out.println(PwdUtils.encryptRawPwd("123456"));
+        System.out.println(PwdUtils.generateRandomPwd(8));
     }
 }
