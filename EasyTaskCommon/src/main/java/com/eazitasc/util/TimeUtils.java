@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -116,6 +117,18 @@ public class TimeUtils {
 
     public static Date setMillisecond(Date date, int mSecond) {
         return setTime(date, Calendar.MILLISECOND, mSecond);
+    }
+
+    public static int getYear(Date date) {
+        return getCalendar(date).get(Calendar.YEAR);
+    }
+
+    public static Calendar getCalendar(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setMinimalDaysInFirstWeek(7);
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.setTime(date);
+        return calendar;
     }
 
     public static Date getYesterday(Date date) {
