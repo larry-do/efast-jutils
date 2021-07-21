@@ -2,11 +2,16 @@ package com.eazitasc.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PwdUtils {
+
+    private static final String LOWER = "abcdefghijklmnopqrstuvwxyz";
+    private static final String UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String DIGITS = "0123456789";
+    private static final String PUNCTUATION = "!@#$%&*()_+-=[]|,./?><";
 
     private static final int DEFAULT_STRENGTH = 12;
     private static BCryptPasswordEncoder pwdEncoder;
@@ -23,23 +28,26 @@ public class PwdUtils {
         return pwdEncoder.matches(rawPwd, encryptedPwd);
     }
 
-    public static String generateRandomPwd(int length) {
-        char[] chars = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
-                '/', ':', ';', '<', '=', '>', '?', '@', '^', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'};
-        try {
-            Random random = SecureRandom.getInstanceStrong();
-            StringBuilder stringBuilder = new StringBuilder(length);
-            for (int i = 0; i < length; i++) {
-                stringBuilder.append(chars[random.nextInt(chars.length)]);
-            }
-            return stringBuilder.toString();
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println("Can't generate random password!");
+    public static String generateRandomPwd(boolean lower, boolean upper, boolean digit, boolean punctuation, int length) {
+        if (length <= 0) {
+            return "";
         }
-        return null;
+
+        StringBuilder password = new StringBuilder(length);
+        Random random = new Random(System.nanoTime());
+
+        List<String> charCategories = new ArrayList<>(4);
+        if (lower) charCategories.add(LOWER);
+        if (upper) charCategories.add(UPPER);
+        if (digit) charCategories.add(DIGITS);
+        if (punctuation) charCategories.add(PUNCTUATION);
+
+        for (int i = 0; i < length; i++) {
+            String charCategory = charCategories.get(random.nextInt(charCategories.size()));
+            int position = random.nextInt(charCategory.length());
+            password.append(charCategory.charAt(position));
+        }
+        return new String(password);
     }
 
     public static BCryptPasswordEncoder getPwdEncoder() {
@@ -48,6 +56,6 @@ public class PwdUtils {
 
     public static void main(String[] args) {
         System.out.println(PwdUtils.encryptRawPwd("123456"));
-        System.out.println(PwdUtils.generateRandomPwd(8));
+        System.out.println(PwdUtils.generateRandomPwd(true, true, true, true, 12));
     }
 }
