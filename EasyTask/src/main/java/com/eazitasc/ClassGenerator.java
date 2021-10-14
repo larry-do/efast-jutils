@@ -14,12 +14,12 @@ public class ClassGenerator {
                 "com.eazitasc.entity",
                 "com.eazitasc.enumtype",
                 "com.eazitasc.repository");
-        entityGenerator.generate();
+        entityGenerator.generate(false);
 
         EnumGenerator enumGenerator = new EnumGenerator(
                 "src/main/resources/data/enum-types.xml",
                 "src/main/java/com/eazitasc/enumtype",
                 "com.eazitasc.enumtype");
-        enumGenerator.generate();
+        enumGenerator.generate(false);
     }
 }

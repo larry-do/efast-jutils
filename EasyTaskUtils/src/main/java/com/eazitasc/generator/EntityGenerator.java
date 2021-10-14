@@ -48,7 +48,12 @@ public class EntityGenerator {
         REPOSITORY_JAVA_PACKAGE = repoPackage;
     }
 
-    public void generate() {
+    /**
+     *  What user manually added will not be removed
+     *
+     * @param forceRefresh true -> Clear and re-generate all classes in target folder
+     * */
+    public void generate(final boolean forceRefresh) {
         System.out.println("------------ READING REPO TO GET CHANGED ENTITY XML FILES -----------------");
         final HashSet<File> changedXmlFiles = getChangedEntityXmlFiles(ENTITY_XML_FOLDER_PATH);
         changedXmlFiles.forEach(System.out::println);
@@ -57,7 +62,7 @@ public class EntityGenerator {
         for (Table table : generatedTables) {
             this.generateEntity(table);
         }
-        // now, this will create metamodel files
+        // now, this create metamodel files
         System.out.println("------------ GENERATING ENTITY META MODEL FILES -----------------");
         packageAndBuild();
 

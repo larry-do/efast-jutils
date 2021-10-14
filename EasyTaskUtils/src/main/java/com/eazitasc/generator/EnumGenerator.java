@@ -33,7 +33,12 @@ public class EnumGenerator {
         ENUM_JAVA_PACKAGE = enumPackage;
     }
 
-    public void generate() {
+    /**
+     *  What user manually added will not be removed
+     *
+     * @param forceRefresh true -> Clear and re-generate all classes in target folder
+     * */
+    public void generate(final boolean forceRefresh) {
         try {
             System.out.println("-------------- GENERATING ENUM TYPES -------------");
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
