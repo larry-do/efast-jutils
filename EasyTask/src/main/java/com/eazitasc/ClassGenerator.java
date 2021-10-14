@@ -5,7 +5,7 @@ import com.eazitasc.generator.EnumGenerator;
 
 import java.io.IOException;
 
-public class Generator {
+public class ClassGenerator {
     public static void main(String[] args) throws IOException {
         EntityGenerator entityGenerator = new EntityGenerator(
                 "src/main/resources/data/entities",

@@ -5,9 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.eazitasc</groupId>
-  <artifactId>easytask-common</artifactId>
+  <artifactId>easytask-utils</artifactId>
   <version>1.0</version>
-  <name>EasyTaskCommon</name>
+  <name>EasyTaskUtils</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

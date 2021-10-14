@@ -52,7 +52,7 @@
     <dependencies>
         <dependency>
             <groupId>com.eazitasc</groupId>
-            <artifactId>easytask-common</artifactId>
+            <artifactId>easytask-utils</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>

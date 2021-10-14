@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../EasyTaskCommon/EasyTaskCommon.iml" filepath="$PROJECT_DIR$/../EasyTaskCommon/EasyTaskCommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../EasyTaskUtils/EasyTaskUtils.iml" filepath="$PROJECT_DIR$/../EasyTaskUtils/EasyTaskUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/easytask.iml" filepath="$PROJECT_DIR$/easytask.iml" />
     </modules>
   </component>
