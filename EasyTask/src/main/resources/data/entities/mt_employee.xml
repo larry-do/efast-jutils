@@ -3,7 +3,7 @@
   <column name="EMPLOYEE_CODE" type="code" nullable="false"/>
   <column name="SHORT_NAME" type="name" nullable="false"/>
   <column name="FULL_NAME" type="name" nullable="false"/>
-  <column name="GENDER" type="gender"/>
+  <column name="GENDER" type="gender" enum="true"/>
   <column name="DATE_OF_BIRTH" type="date"/>
   <column name="DATE_OF_JOINING" type="date"/>
   <column name="COMPANY_EMAIL" type="email"/>

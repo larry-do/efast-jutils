@@ -36,7 +36,7 @@ public class Column {
     @XmlTransient
     private Boolean isPrimaryKey;
 
-    @XmlTransient
+    @XmlAttribute(name = "enum")
     private Boolean isEnum;
 
     @XmlTransient

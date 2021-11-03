@@ -151,8 +151,7 @@ public class EntityGenerator {
                 if (column.getName() != null) {
                     column.setName(column.getName().toLowerCase());
                 }
-                if (column.getType().lastIndexOf("enum") != -1) {
-                    column.setIsEnum(Boolean.TRUE);
+                if (column.getIsEnum() != null && column.getIsEnum()) {
                     String enumName = "";
                     for (String s : column.getType().split("-")) {
                         enumName = enumName + StringUtils.capitalize(s);
