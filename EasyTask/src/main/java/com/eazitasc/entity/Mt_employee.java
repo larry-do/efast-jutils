@@ -1,6 +1,7 @@
 package com.eazitasc.entity;
 
-import com.eazitasc.enumtype.GenderEnum;
+import com.eazitasc.enumtype.Gender;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class Mt_employee extends Auditable_entity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
-    private GenderEnum gender;
+    private Gender gender;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth", columnDefinition = "date")
@@ -81,11 +82,11 @@ public class Mt_employee extends Auditable_entity {
         this.full_name = full_name;
     }
 
-    public GenderEnum getGender() {
+    public Gender getGender() {
         return this.gender;
     }
 
-    public void setGender(final GenderEnum gender) {
+    public void setGender(final Gender gender) {
         this.gender = gender;
     }
 

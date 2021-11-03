@@ -1,7 +1,6 @@
 package com.eazitasc.security;
 
 import com.eazitasc.entity.Sys_persistent_login;
-import com.eazitasc.util.EasyUtils;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.stereotype.Repository;

@@ -27,6 +27,10 @@ public class EnumGenerator {
 
     private final String ENUM_TEMPLATE = "enum-template.ftl";
 
+    /**
+     * @param enumXmlFilePath Should be set correct Working Directory by main class
+     * @param enumJavaFolderPath Should be set correct Working Directory by main class
+     * */
     public EnumGenerator(final String enumXmlFilePath, final String enumJavaFolderPath, final String enumPackage) {
         ENUM_XML_FILE_PATH = new File(enumXmlFilePath).getAbsoluteFile();
         ENUM_JAVA_FOLDER_PATH = new File(enumJavaFolderPath).getAbsoluteFile();
