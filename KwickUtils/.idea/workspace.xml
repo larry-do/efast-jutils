@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a2b3bbc7-4dd4-470e-9dc3-a7bf94a828d1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/ClassGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/ClassGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/Column.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/Column.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/ForeignKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/ForeignKey.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/PrimaryKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/PrimaryKey.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/UniqueConstraint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/UniqueConstraint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/paging/PagingRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/paging/PagingRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/binding/paging/PagingResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/paging/PagingResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/data/Pair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/data/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/ActiveStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/ActiveStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/ApprovalStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/ApprovalStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/BooleanLegacy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/BooleanLegacy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/ConfirmationStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/ConfirmationStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/Gender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/Gender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/Periodicity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/Periodicity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/ProcessingStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/ProcessingStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/VoucherStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/VoucherStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/enumtype/WorkingTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/enumtype/WorkingTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/generator/EntityGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/generator/EntityGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/generator/EnumGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/generator/EnumGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/util/CollUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CollUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/util/CookieUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CookieUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/util/EasyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/EasyUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/util/PwdUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/PwdUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/eazitasc/util/TimeUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/TimeUtils.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/classes/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CollUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CookieUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/EasyUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-7">
+              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/PwdUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/TimeUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CollUtils.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+        <option value="$PROJECT_DIR$/.idea/uiDesigner.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="100" />
+    <option name="y" value="20" />
+    <option name="width" value="1400" />
+    <option name="height" value="820" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="easytask-utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EasyTaskUtils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="easytask-utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EasyTaskUtils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="easytask-utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EasyTaskUtils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="easytask-utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EasyTaskUtils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="easytask-utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EasyTaskUtils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="eazitasc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="easytask-utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="EasyTaskUtils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="eazitasc" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+  </component>
+  <component name="RebelAgentSelection">
+    <selection>jr</selection>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a2b3bbc7-4dd4-470e-9dc3-a7bf94a828d1" name="Default Changelist" comment="" />
+      <created>1636168894240</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1636168894240</updated>
+      <workItem from="1636168895688" duration="47000" />
+      <workItem from="1636169377447" duration="509000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="556000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25321338" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="JRebel" order="2" side_tool="true" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32974428" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="10" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="JRebel Console" order="12" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Maven" order="4" />
+      <window_info anchor="right" id="JRebel Setup Guide" order="5" side_tool="true" />
+      <window_info anchor="right" id="Palette&#9;" order="6" />
+      <window_info anchor="right" id="Database" order="7" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/resources/i18n/messages_vi.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/binding/paging/PagingRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/templates/entity-template.ftl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="56" column="7" selection-start-line="56" selection-start-column="7" selection-end-line="56" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CookieUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/EasyUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/TimeUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/PwdUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/eazitasc/utils/CollUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="14" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
