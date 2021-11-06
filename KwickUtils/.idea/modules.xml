@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/easytask-utils.iml" filepath="$PROJECT_DIR$/easytask-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kwick-utils.iml" filepath="$PROJECT_DIR$/kwick-utils.iml" />
     </modules>
   </component>
 </project>
