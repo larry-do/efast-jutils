@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="us-ascii"?>
-<table name="AUDITABLE_ENTITY" abstract="true">
-  <column name="CREATED_BY" type="code" nullable="true"/>
-  <column name="CREATED_DATETIME" type="datetime" nullable="true" default="current-time"/>
-  <column name="LAST_UPDATED_BY" type="code" nullable="true"/>
-  <column name="LAST_UPDATED_DATETIME" type="datetime" nullable="true"/>
-  <column name="AUDIT_VERSION" type="version" nullable="true" default="0"/>
-</table>
