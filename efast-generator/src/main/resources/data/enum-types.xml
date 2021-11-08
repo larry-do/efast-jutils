@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<enums>
+    <enum name="gender" values="male(m), female(fe), other(o)"/>
+    <enum name="boolean-legacy" values="yes(y), no(n), true(t), false(f)"/>
+    <enum name="active-status" values="active(a), inactive(ia), disabled(d)"/>
+    <enum name="confirmation-status" values="confirmed(c), unconfirmed(uc)"/>
+    <enum name="voucher-status" values="draft(d), outstanding(o), history(h), completed(c), do_variation(dv), under_variation(uv)"/>
+    <enum name="approval-status" values="approved(a), pending(p), rejected(r), none(n)"/>
+    <enum name="processing-status" values="processing(p), failed(f), success(s)"/>
+    <enum name="periodicity" values="hourly(h), daily(d), weekly(w), monthly(m), quarterly(q), yearly(y)"/>
+    <enum name="working-time" values="full_day(fd), ante_mediriem(am), post_mediriem(pm)"/>
+</enums>
