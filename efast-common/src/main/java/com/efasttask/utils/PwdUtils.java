@@ -14,7 +14,7 @@ public class PwdUtils {
     private static final String PUNCTUATION = "!@#$%&*()_+-=[]|,./?><";
 
     private static final int DEFAULT_STRENGTH = 12;
-    private static BCryptPasswordEncoder pwdEncoder;
+    private static final BCryptPasswordEncoder pwdEncoder;
 
     static {
         pwdEncoder = new BCryptPasswordEncoder(DEFAULT_STRENGTH);
