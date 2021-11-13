@@ -1,4 +1,4 @@
-package com.efasttask.utils.data;
+package com.efasttask.util.data;
 
 public class Pair<F, S> {
     public F first;

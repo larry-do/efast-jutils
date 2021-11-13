@@ -1,7 +1,7 @@
-package com.efasttask.utils.generator;
+package com.efasttask.util.generator;
 
-import com.efasttask.utils.binding.ForeignKey;
-import com.efasttask.utils.binding.Table;
+import com.efasttask.util.binding.ForeignKey;
+import com.efasttask.util.binding.Table;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

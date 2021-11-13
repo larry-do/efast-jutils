@@ -1,6 +1,6 @@
-package com.efasttask.utils.data;
+package com.efasttask.util.data;
 
-import com.efasttask.utils.message.Message;
+import com.efasttask.util.message.Message;
 
 import java.util.List;
 

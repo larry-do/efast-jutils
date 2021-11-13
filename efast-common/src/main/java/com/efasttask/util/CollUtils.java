@@ -1,4 +1,4 @@
-package com.efasttask.utils;
+package com.efasttask.util;
 
 import java.util.List;
 import java.util.stream.Collectors;

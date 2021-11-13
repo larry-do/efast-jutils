@@ -1,4 +1,4 @@
-package com.efasttask.utils.generator;
+package com.efasttask.util.generator;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

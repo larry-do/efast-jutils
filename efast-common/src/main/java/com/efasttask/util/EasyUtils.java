@@ -1,4 +1,4 @@
-package com.efasttask.utils;
+package com.efasttask.util;
 
 public class EasyUtils {
     public static <T> T getValueOrElseIfNull(T orgValue, T altValue) {

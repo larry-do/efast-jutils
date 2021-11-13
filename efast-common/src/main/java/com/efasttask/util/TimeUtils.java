@@ -1,4 +1,4 @@
-package com.efasttask.utils;
+package com.efasttask.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

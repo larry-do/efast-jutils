@@ -1,4 +1,4 @@
-package com.efasttask.utils.binding.paging;
+package com.efasttask.util.binding.paging;
 
 import lombok.Getter;
 import lombok.Setter;

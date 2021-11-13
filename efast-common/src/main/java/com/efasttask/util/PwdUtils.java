@@ -1,4 +1,4 @@
-package com.efasttask.utils;
+package com.efasttask.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

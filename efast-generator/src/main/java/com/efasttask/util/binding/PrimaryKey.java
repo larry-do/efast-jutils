@@ -1,4 +1,4 @@
-package com.efasttask.utils.binding;
+package com.efasttask.util.binding;
 
 import lombok.Getter;
 import lombok.Setter;

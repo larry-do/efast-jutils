@@ -1,4 +1,4 @@
-package com.efasttask.utils;
+package com.efasttask.util;
 
 import org.apache.commons.lang3.SerializationUtils;
 

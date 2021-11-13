@@ -1,6 +1,6 @@
 package com.efasttask;
 
-import com.efasttask.utils.generator.EnumGenerator;
+import com.efasttask.util.generator.EnumGenerator;
 
 public class ClassGenerator {
     public static void main(String[] args) {
