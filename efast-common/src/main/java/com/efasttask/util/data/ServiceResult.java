@@ -1,6 +1,7 @@
 package com.efasttask.util.data;
 
 import com.efasttask.util.message.Message;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 
@@ -39,5 +40,13 @@ public class ServiceResult<E> {
 
     public List<Message> getMessages() {
         return messages;
+    }
+
+    public void showMessages() {
+        if (CollectionUtils.isNotEmpty(this.getMessages())) {
+            for (Message message : this.getMessages()) {
+                message.show();
+            }
+        }
     }
 }
