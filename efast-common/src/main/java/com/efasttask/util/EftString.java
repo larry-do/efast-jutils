@@ -1,8 +1,10 @@
 package com.efasttask.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Arrays;
 
-public class EftStringUtils {
+public class EftString {
     private static final char[] SOURCE_VIETNAMESE_CHARACTERS = {'À', 'Á', 'Â', 'Ã', 'È', 'É',
             'Ê', 'Ì', 'Í', 'Ò', 'Ó', 'Ô', 'Õ', 'Ù', 'Ú', 'Ý', 'à', 'á', 'â',
             'ã', 'è', 'é', 'ê', 'ì', 'í', 'ò', 'ó', 'ô', 'õ', 'ù', 'ú', 'ý',
@@ -38,7 +40,7 @@ public class EftStringUtils {
     public static String removeVietnameseAccent(final String str) {
         StringBuilder sb = new StringBuilder(str);
         for (int i = 0; i < sb.length(); i++) {
-            sb.setCharAt(i, EftStringUtils.removeVietnameseAccent(sb.charAt(i)));
+            sb.setCharAt(i, EftString.removeVietnameseAccent(sb.charAt(i)));
         }
         return sb.toString();
     }
@@ -46,8 +48,15 @@ public class EftStringUtils {
     public static String removeVietnameseAccent(final String str, final char link_char) {
         StringBuilder sb = new StringBuilder(str);
         for (int i = 0; i < sb.length(); i++) {
-            sb.setCharAt(i, EftStringUtils.removeVietnameseAccent(sb.charAt(i)));
+            sb.setCharAt(i, EftString.removeVietnameseAccent(sb.charAt(i)));
         }
         return sb.toString().replaceAll("\\s+", String.valueOf(link_char));
+    }
+
+    public static String getExtension(String filename) {
+        filename = StringUtils.trim(filename);
+        if (filename == null) return null;
+        int index = filename.lastIndexOf('.');
+        return index >= 0 ? filename.substring(index) : "";
     }
 }

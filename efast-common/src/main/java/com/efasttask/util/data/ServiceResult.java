@@ -3,6 +3,7 @@ package com.efasttask.util.data;
 import com.efasttask.util.message.Message;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ServiceResult<E> {
@@ -17,6 +18,11 @@ public class ServiceResult<E> {
     public ServiceResult(boolean successfully, List<Message> messages) {
         this.successfully = successfully;
         this.messages = messages;
+    }
+
+    public ServiceResult(boolean successfully, Message message) {
+        this.successfully = successfully;
+        this.messages = Collections.singletonList(message);
     }
 
     public ServiceResult(boolean successfully, E data) {
