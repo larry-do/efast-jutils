@@ -53,9 +53,4 @@ public class PwdUtils {
     public static BCryptPasswordEncoder getPwdEncoder() {
         return pwdEncoder;
     }
-
-    public static void main(String[] args) {
-        System.out.println(PwdUtils.encryptRawPwd("123456"));
-        System.out.println(PwdUtils.generateRandomPwd(true, true, true, true, 12));
-    }
 }
