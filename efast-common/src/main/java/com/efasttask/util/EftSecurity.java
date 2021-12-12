@@ -7,7 +7,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SecurityUtils {
+public class EftSecurity {
     public static String md5(String data) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] array = md.digest(data.getBytes(StandardCharsets.UTF_8));

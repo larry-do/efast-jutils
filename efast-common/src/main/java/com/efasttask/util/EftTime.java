@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class TimeUtils {
+public class EftTime {
     public static final long MILLISECONDS_PER_DAY = 86400000L;
 
     public static String DDHHMM = "ddHHmm";

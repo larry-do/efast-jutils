@@ -6,7 +6,7 @@
 
   <groupId>com.efasttask</groupId>
   <artifactId>efast-common</artifactId>
-  <version>0.1</version>
+  <version>1.0</version>
   <name>eFastTask - Common classes, libraries, utils</name>
 
   <properties>

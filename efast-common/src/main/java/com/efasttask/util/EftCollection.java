@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-public class CollUtils {
+public class EftCollection {
     public static List<Integer> rangeInt(int start, int to) {
         return IntStream.rangeClosed(start, to + 1).boxed().collect(Collectors.toList());
     }
